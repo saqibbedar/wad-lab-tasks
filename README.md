@@ -11,7 +11,7 @@ This repository is currently empty but will soon include all the lab tasks and a
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/your-username/wad-lab-tasks.git
+    git clone https://github.com/saqibbedar/wad-lab-tasks.git
     ```
 2. Navigate to the specific task folder to view the code and instructions.
 
