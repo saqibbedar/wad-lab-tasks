@@ -17,7 +17,7 @@ This repository is currently empty but will soon include all the lab tasks and a
 
 ## License
 
-This repository is for educational purposes only and is part of the CS-234 WAD course.
+This repository is for educational purposes only and is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
 
