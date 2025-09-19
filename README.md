@@ -6,8 +6,8 @@ This repository is currently empty but will soon include all the lab tasks and a
 
 | S.No | Project name | Preview Link |
 |:-- | :-- | :-- |
-| 1. | Lab01 | [Preview →](./index.html) |
-| 2. | Lab02 | [Preview →](./src/tasks/Lab02/index.html) |
+| 1. | Lab01 | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/) |
+| 2. | Lab02 | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab02/index.html) |
 
 ## How to Use
 
