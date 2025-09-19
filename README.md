@@ -2,10 +2,12 @@
 
 This repository is currently empty but will soon include all the lab tasks and assignments for the **CS-234 Web Application Development (WAD)** course. Stay tuned for updates as the content will be added progressively.
 
-# Folder Structure
+# Lab Tasks
 
-- `src/tasks`: Contains all the lab tasks
-- `src/assignments`: Contains all the assignments
+| S.No | Project name | Preview Link |
+|:-- | :-- | :-- |
+| 1. | Lab01 | [Preview →](./index.html) |
+| 2. | Lab02 | [Preview →](./src/tasks/Lab02/index.html) |
 
 ## How to Use
 
