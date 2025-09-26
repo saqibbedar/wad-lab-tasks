@@ -1,0 +1,61 @@
+/* Lab task 03 */
+
+/**** Global styles ****/
+
+/* default styles */
+html, body {
+    color: #474444; /* default text color for descriptions*/
+}
+
+/* .pk styles */
+a[href$=".pk"]{
+    color: #33673B;
+}
+a[href$=".pk"]:hover{
+    color: #43894E;
+}
+a[href$=".pk"]:visited{
+    color: #19231A;
+}
+
+/* linkedIn url styles */
+a[href*="linkedin"]{
+    color: #0077b6;
+}
+a[href*="linkedin"]:hover{
+    color: #2ea0dd;
+}
+
+h1 {
+    color: #0077b6;
+}
+
+
+
+
+/**** Global Styles End Here ****/
+
+/* Header styles */
+.top-section > a {
+ color: #6f1d1b;
+}
+.top-section > a:hover {
+    color: #942523;
+}
+
+/* About section */
+.about-section > h2 {
+    font-size: 16px;
+}
+.about-section > h2 > span:first-child {
+    color: #0077b6;
+    font-size: 1.9rem;    
+}
+.about-section > h2 > span:last-child{
+    font-size: 1.6rem;
+}
+.about-section > p > strong {
+    color: #0077b6;
+    font-size: 1.9rem;
+}
+
