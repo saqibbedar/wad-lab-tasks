@@ -1,14 +1,15 @@
 # CS-234 WAD: Web Application Development Lab Tasks
 
-This repository is currently empty but will soon include all the lab tasks and assignments for the **CS-234 Web Application Development (WAD)** course. Stay tuned for updates as the content will be added progressively.
+This repository contains my web projects, part of my semester course **CS-234 Web Application Development (WAD)** and, it is progressively being developed/maintained.
 
-# Lab Tasks
+# Projects Includes
 
-| S.No | Project name | Preview Link |
-|:-- | :-- | :-- |
-| 1. | Lab01 | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/) |
-| 2. | Lab02 | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab02/index.html) |
-| 3. | Lab03 | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab03/index.html) |
+| S.No | Project name | description | Preview Link | Source Code |
+|:-- | :-- | :-- | :-- | :-- |
+| 1. | Lab01 | This is a home page, enlist all of completed projects. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/) | [Source →](./index.html) |
+| 2. | Lab02 | This includes basic use of HTML with semantics for better SEO and accessibility. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab02/index.html) | [Source →](./src/tasks/Lab02/) |
+| 3. | Lab03 | This is same as Lab02 but with additional CSS styling. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab03/index.html) | [Source →](./src/tasks/Lab03/) |
+
 
 ## How to Use
 
@@ -16,7 +17,7 @@ This repository is currently empty but will soon include all the lab tasks and a
     ```bash
     git clone https://github.com/saqibbedar/wad-lab-tasks.git
     ```
-2. Navigate to the specific task folder to view the code and instructions.
+2. Navigate to the /src/tasks directory to view specific task implementations.
 
 ## License
 
