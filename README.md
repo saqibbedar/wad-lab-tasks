@@ -4,7 +4,7 @@ This repository contains my web projects, part of my semester course **CS-234 We
 
 # Projects Includes
 
-| S.No | Project name | description | Preview Link | Source Code |
+| S.No | Project name | Description | Preview Link | Source Code |
 |:-- | :-- | :-- | :-- | :-- |
 | 1. | Lab01 | This is a home page, enlist all of completed projects. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/) | [Source →](./index.html) |
 | 2. | Lab02 | This includes basic use of HTML with semantics for better SEO and accessibility. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab02/index.html) | [Source →](./src/tasks/Lab02/) |
@@ -24,5 +24,6 @@ This repository contains my web projects, part of my semester course **CS-234 We
 This repository is for educational purposes only and is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
+
 
 Feel free to contribute or raise issues if you find any errors or have suggestions!
