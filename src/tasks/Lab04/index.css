@@ -1,0 +1,70 @@
+/* Lab task 03 */
+
+/**** Global styles ****/
+
+/* default styles */
+html, body {
+    color: rgba(0, 0, 0, 0.755); /* default text color for descriptions*/
+    margin: 15px 15px;
+}
+
+/* .pk styles */
+a[href$=".pk"]{
+    color: #00a63e;
+}
+a[href$=".pk"]:hover{
+    color: #00c951;
+}
+
+a {
+    color: #155dfc;
+}
+a:hover {
+    color: #2b7fff;
+}
+
+/* Global styles */
+/* headings */
+h1, h2, h3, h4, h5, h6 {
+    color: rgba(0,0,0, 9);
+}
+/* sections */
+.edu > h1, .edu > ul, .skills > h1, .skills > ul {
+    margin: 15px 0;
+}
+
+/* Section: Header styles */
+.top-section > a {
+ background: #155dfc;
+ color: white;
+ text-decoration: none; /*Not told by sir, but it makes UI ugly thats why using to remove underline*/
+ padding: 6px 10px;
+ border-radius: 4px;
+}
+.top-section > a:hover {
+    background: #2b7fff;
+}
+.top-section > h1 {
+    margin: 22px 0 15px 0;
+    padding: 0;    
+}
+
+/* About section */
+.about-section > h2 {
+    font-size: 16px;
+}
+.about-section > h2 > span:first-child {
+    font-size: 1.9rem;    
+}
+.about-section > h2 > span:last-child{
+    font-size: 1.6rem;
+}
+.about-section > p > strong {
+    font-size: 1.9rem;
+    color: rgba(0,0,0, 9);
+}
+
+/* Image styles */
+img[alt*="Profile"] {
+    border-radius: 5px;
+}
