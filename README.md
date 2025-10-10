@@ -9,6 +9,7 @@ This repository contains my web projects, part of my semester course **CS-234 We
 | 1. | Lab01 | This is a home page, enlist all of completed projects. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/) | [Source →](./index.html) |
 | 2. | Lab02 | This includes basic use of HTML with semantics for better SEO and accessibility. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab02/index.html) | [Source →](./src/tasks/Lab02/) |
 | 3. | Lab03 | This is same as Lab02 but with additional CSS styling. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab03/index.html) | [Source →](./src/tasks/Lab03/) |
+| 3. | Lab04 | Includes same html contents with additional/advance CSS styling. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab04/index.html) | [Source →](./src/tasks/Lab04/) |
 
 
 ## How to Use
