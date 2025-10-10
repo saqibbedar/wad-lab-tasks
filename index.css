@@ -1,0 +1,11 @@
+#main > li {
+    margin: 0 0 8px 0;
+    font-size: 1.17rem;
+}
+a {
+    color: #155dfc;
+    font-size: inherit;
+}
+a:hover {
+    color: #2b7fff;
+}
