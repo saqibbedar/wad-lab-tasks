@@ -1,0 +1,93 @@
+/* Previous Styles from lab 04 */
+html, body {
+    margin: 15px 15px;
+}
+/* Section Header Homepage button */
+.top-section > a {
+ background: #615fff;
+ color: white;
+ text-decoration: none; /*Not told by sir, but it makes UI ugly thats why using to remove underline*/
+ padding: 6px 10px;
+ border-radius: 4px;
+}
+.top-section > a:hover {
+    color: white;
+    background: #7c86ff;
+}
+.top-section > h1 {
+    margin: 2rem 0 1.3rem 0;
+    padding: 0;    
+}
+/* Image styles */
+img[alt*="Profile"] {
+    border-radius: 5px;
+    width: auto;
+    height: 350px;
+}
+
+
+/* New Styles for Lab 05 */
+/* about */
+.about {
+    margin-block: 1.2rem;
+}
+.about h2 {
+    margin-bottom: .5rem;
+}
+.about p {
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+.about img {
+    margin-bottom: .4rem;
+}
+
+/* mixed */
+.education, .skills {
+    margin-top: 1.5rem;
+}
+.skills {
+    margin-bottom: 2.5rem;
+}
+.education table > caption, .skills table > caption {
+    text-align: left;
+    font-size: xx-large;
+}
+.education table > tbody > tr > td:nth-child(1), .skills table > tbody > tr > td:nth-child(1) {
+    color: #030712;
+}
+.education table > tbody > tr > td strong, .skills table > tbody > tr > td strong {
+    font-weight: 100;
+}
+
+/* contact */
+.contact {
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+}
+.contact h2 {
+    margin-bottom: .5rem;
+}
+.contact p {
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+
+.contact > form {
+    width: fit-content;
+}
+.contact > form > input, textarea {
+    width: 100%;
+    padding: 10px 8px;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.contact > form > label {
+    font-size: x-large;
+}
+
+
+footer {
+    margin-top: 2rem;
+}
