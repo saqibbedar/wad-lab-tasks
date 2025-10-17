@@ -1,11 +1,12 @@
-#main > li {
-    margin: 0 0 8px 0;
-    font-size: 1.17rem;
+html, body {
+    margin: 15px;
 }
-a {
-    color: #155dfc;
-    font-size: inherit;
+#projects-list h1{
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
-a:hover {
-    color: #2b7fff;
+tbody > tr > td:nth-child(2) {
+    padding: 12px 8px;
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.755);
 }
