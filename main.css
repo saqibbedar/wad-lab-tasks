@@ -1,0 +1,88 @@
+/* Roboto fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* This file is now considered as global css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+html, body {
+    background: white;
+    color: #030712;
+    font-family: "Roboto", sans-serif;
+}
+a {
+    text-decoration: none;
+    color: #615fff;
+}
+a:hover{
+    color: #7c86ff;
+}
+li {
+    list-style: none;
+}
+p, span, li, caption {
+    color: #6a7282;
+    font-size: large;
+}
+h1, h2, h3, h4, h5, h6 {
+    color: #030712;
+    font-weight: 600;
+    font-size: xx-large;
+}
+hr {
+    background: #03071217; /*Make it variable for all borders*/
+    border: none;
+    height: 2px;
+}
+
+table {
+    border: solid 1px #03071217;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: left;
+}
+table > caption {
+    color: #030712;
+    text-align: center;
+    font-size: x-large;
+    margin-bottom: 1rem;
+    padding: 10px 0;
+}
+th, td {
+    padding: 10px 10px;
+    border: 1px solid #03071217;
+    background-color: #ffffff;
+}
+thead > tr > th {
+    margin: 10rem 0;
+    padding: 22px 10px;
+    background-color: #f9fafb;
+    color: #030712;
+    font-size: x-large;
+}
+tbody > tr > td {
+    padding: 15px 10px;
+    color: #6a7282;
+    font-size: large;
+}
+
+/* buttons */
+button {
+    border: none;
+    height: 30px;
+    background: transparent;
+}
+button a {
+    background: #615fff;
+    border-radius: 3px;
+    padding: 5px 10px;
+    color: white;
+    font-weight: 600;
+    height: 100%;
+}
+button a:hover {
+    color: white;
+    background: #7c86ff;
+}

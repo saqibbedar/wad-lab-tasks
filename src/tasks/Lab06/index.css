@@ -1,0 +1,127 @@
+/* navbar */
+.navbar {
+    position: sticky;
+    top: 0;
+}
+.navbar > ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-bottom: 1px solid #03071217;
+    height: 11vh;
+}
+.navbar > ul > li {
+    padding-inline: 20px;
+}
+.navbar .logo{
+    font-size: 20px;
+    font-weight: 600;
+    a {
+        color: #030712;
+    }
+}
+.middle-items {
+    display: flex;
+    gap: 10px;
+}
+.middle-items li > a {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .2px;
+}
+
+/* main-container */
+#main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* padding-inline: 20px; */
+}
+
+/* border-bottom for all sections */
+#main-container > section {
+    border-bottom: 1px solid #03071217;
+    padding-inline: 20px;
+}
+
+/* about section */
+#about {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-block: 40px;
+    gap: 15px;
+}
+#about img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+#about div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    p {
+        font-size: 15px
+    }
+}
+
+/* certificates */
+#certificates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    
+}
+
+#certificates .card {
+    width: 300px;
+    overflow: hidden;
+    padding: 10px ;
+    border: 1px solid #03071217;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.card > img {
+    width: 280px;
+    height: 180px;
+}
+.card #org {
+    width: 100%;
+    display: flex;
+    text-align: left;
+    justify-content: start;
+    align-items: center;
+    gap: 5px;
+    margin-block: 10px;
+}
+
+.card > h2 {
+    font-size: 19px;
+    width: 100%;
+    text-align: left;
+}
+.card > p {
+    font-size: 14px;
+    margin-block: 10px;
+}
+.card > div > img {
+    width: 30px;
+}
+
+.card > a {
+    width: 100%;
+}
+
+
+/* footer */
+.footer {
+    display: flex;
+    padding-inline: 20px;
+}
