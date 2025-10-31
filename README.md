@@ -11,6 +11,8 @@ This repository contains my web projects, part of my semester course **CS-234 We
 | 3. | Lab03 | This is same as Lab02 but with additional CSS styling. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab03/index.html) | [Source →](./src/tasks/Lab03/) |
 | 4. | Lab04 | Includes same html contents with additional/advance CSS styling. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab04/index.html) | [Source →](./src/tasks/Lab04/) |
 | 5. | Lab05 | Lab05 includes same contents as previous with information formatted into tables and includes advance html features i.e., forms etc. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab05/index.html) | [Source →](./src/tasks/Lab05/) |
+| 6. | Lab06 | Lab06 includes same contents as previous with information formatted into tables and includes advance html features i.e., forms etc. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab06/index.html) | [Source →](./src/tasks/Lab06/) |
+| 7. | Lab07 | Lab07 includes advanced CSS layout techniques and responsive design principles. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab07/index.html) | [Source →](./src/tasks/Lab07/) |
 
 
 ## How to Use
