@@ -68,12 +68,20 @@
     }
 }
 
+/* skills */
+#education, #skills, #certificates, #contact {
+    padding-bottom: 40px;
+}
+
 /* certificates */
 #certificates {
     display: flex;
     flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
     gap: 20px;
-    
+    width: 100%;
+    padding-top: 10px;
 }
 
 #certificates .card {
@@ -85,12 +93,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
 
+#certificates h1 {
+    width: 100%;
+    text-align: center;
 }
 
 .card > img {
     width: 280px;
     height: 180px;
+    border-radius: 4px;
 }
 .card #org {
     width: 100%;
@@ -119,9 +132,45 @@
     width: 100%;
 }
 
+/* contact */
+#contact {
+    width: 100%;
+    display: flex;
+    padding-top: 20px;
+}
+#contact > .contact-left {
+    flex-basis: 0;
+    flex-grow: 1;
+}
+#contact > form {
+    flex-grow: 1.5;
+    flex-basis: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+#contact > form > h2 {
+    margin-bottom: 10px;
+    text-align: center;
+}
+#contact > form > input, textarea {
+    font-size: large;
+    padding: 10px;
+}
+
+#contact > form > button {
+    margin-top: 10px;
+}
+#contact > form > button > a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;    
+}
 
 /* footer */
 .footer {
     display: flex;
     padding-inline: 20px;
+    padding-block: 15px;
 }
