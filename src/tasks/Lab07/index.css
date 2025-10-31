@@ -1,0 +1,257 @@
+/* Grid container */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+/* navbar */
+.navbar {
+    position: sticky;
+    top: 0;
+}
+.navbar > ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-bottom: 1px solid #03071217;
+    height: 11vh;
+}
+.navbar > ul > li {
+    padding-inline: 20px;
+}
+.navbar .logo{
+    font-size: 20px;
+    font-weight: 600;
+    a {
+        color: #030712;
+    }
+}
+.middle-items {
+    display: flex;
+    gap: 10px;
+}
+.middle-items li > a {
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .2px;
+}
+
+/* main-container */
+#main-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-x: hidden;
+    /* padding-inline: 20px; */
+}
+
+/* border-bottom for all sections */
+#main-container > section {
+    /* border-bottom: 1px solid #03071217; */
+    padding-inline: 20px;
+}
+
+/* about section */
+#about {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-block: 40px;
+    gap: 17px;
+}
+#about img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+#about div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    p {
+        text-align: center;
+    }
+}
+
+/* skills */
+#education, #skills, #certificates, #contact {
+    padding-bottom: 40px;
+}
+
+/* certificates */
+#certificates {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    padding-top: 10px;
+}
+
+#certificates .card {
+    width: 300px;
+    overflow: hidden;
+    padding: 10px ;
+    border: 1px solid #03071217;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#certificates h1 {
+    width: 100%;
+    text-align: center;
+}
+
+.card > img {
+    width: 280px;
+    height: 180px;
+    border-radius: 4px;
+}
+.card #org {
+    width: 100%;
+    display: flex;
+    text-align: left;
+    justify-content: start;
+    align-items: center;
+    gap: 5px;
+    margin-block: 10px;
+}
+
+.card > h2 {
+    font-size: 19px;
+    width: 100%;
+    text-align: left;
+}
+.card > p {
+    font-size: 14px;
+    margin-block: 10px;
+}
+.card > div > img {
+    width: 30px;
+}
+
+.card > a {
+    width: 100%;
+}
+
+/* contact */
+#contact {
+    width: 90%;
+    margin: auto;
+    padding-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    background: #030712;
+    border-radius: 10px;
+    margin-bottom: 49px;
+    overflow: hidden;
+}
+.contact-left {
+    justify-self: center;
+    align-self: center;
+    img {
+        width: 300px;
+    }
+}
+#contact > form {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+}
+#contact > form > h2 {
+    margin-bottom: 10px;
+    text-align: center;
+    color: white;
+}
+#contact > form > label {
+    color: white;
+}
+#contact > form > input, textarea {
+    font-size: large;
+    padding: 10px;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+}
+
+#contact input[type="submit"] {
+    margin-top: 10px;
+    background: #615fff;
+    color: white;
+    font-weight: 600;
+    border: none;
+    height: 40px;
+    cursor: pointer;
+}
+
+/* footer */
+.footer {
+    padding-inline: 20px;
+    padding-block: 25px;
+    border-top: 1px solid #03071217;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-areas: 
+    "lab07 menu links"
+    "copyright copyright copyright";
+    ;
+    gap: 25px;
+}
+.footer > section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.footer > section > h4{
+    font-size: x-large;
+}
+.footer > section > ul{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+footer > p {
+    border-top: 1px solid #03071217;
+    padding-top: 15px;
+    font-size: 18px;
+    text-align: center;
+    grid-area: copyright;
+}
+
+
+/* Responsive */
+@media only screen and (max-width: 1080px) {
+    /* contact */
+    #contact {
+        grid-template-columns: 1fr;
+    }
+    #contact > form > input, textarea  {
+        width: auto;
+    }
+}
+/* Responsive */
+@media only screen and (max-width: 767px) {
+    /* contact */
+    .footer {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+        "lab07"
+        "menu"
+        "links"
+        "copyright"
+    }
+}
+
+/* Responsive */
+@media only screen and (max-width: 667px) {
+    .nav-middle {
+        display: none;
+    }
+}
