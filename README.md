@@ -14,6 +14,9 @@ This repository contains my web projects, part of my semester course **CS-234 We
 | 6. | Lab06 | Lab06 includes same contents as previous with information formatted into tables and includes advance html features i.e., forms etc. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab06/index.html) | [Source →](./src/tasks/Lab06/) |
 | 7. | Lab07 | Lab07 includes advanced CSS layout techniques and responsive design principles. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab07/index.html) | [Source →](./src/tasks/Lab07/) |
 
+# Resources
+1. [Midterm Past Paper 2022](./src/past-papers/mid/)
+2. [FinalTerm Past Paper 2022](./src/past-papers/final/)
 
 ## How to Use
 
