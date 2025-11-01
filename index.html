@@ -8,83 +8,105 @@
     <title>WAD | Home</title>
 </head>
 <body>
-    <!-- Introduction Section -->
-    <section id="intro">
-        <h1>CS-234 WAD: Web Application Development Lab Tasks</h1>
-        <hr>
-        <p>This is a homepage to <a href="https://github.com/saqibbedar/wad-lab-tasks/"><strong>CS-234 Web Application Development (WAD)</strong></a> that contains my web projects, part of my semester course <strong>CS-234 Web Application Development (WAD)</strong> and, it is progressively being developed/maintained.</p>
-    </section>
-    
-    <!-- Projects List Section -->
-    <section id="projects-list">
-        <h1>Projects Lists</h1>
-        <hr>
-        <table>
-            <caption><strong>Lab Tasks Includes</strong></caption>
-            <!-- Table Head -->
-            <thead>
-                <tr id="t-head">
-                    <th>S.No.</th>
-                    <th>Project Name</th>
-                    <th>Description</th>
-                    <th>Preview Link</th>
-                    <th>Source Code</th>
-                </tr>
-            </thead>
-            <!-- Table Body: includes rows -->
-            <tbody>
-                <tr>
-                    <td>1.</td>
-                    <td><strong>Lab01</strong></td>
-                    <td><p>Lab01 is a home page, enlist all of completed projects.</p></td>
-                    <td><a href="./index.html" title="Project Preview">Preview</a></td>
-                    <td><a href="https://github.com/saqibbedar/wad-lab-tasks/" title="Source Code">Source Code</a></td>
-                </tr>
-                <tr>
-                    <td>2.</td>
-                    <td><strong>Lab02</strong></td>
-                    <td><p>This includes basic use of HTML with semantics for better SEO and accessibility.</p></td>
-                    <td><a href="./src/tasks/Lab02/index.html" title="Project Preview">Preview</a></td>
-                    <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab02/" title="Source Code">Source Code</a></td>
-                </tr>
-                <tr>
-                    <td>3.</td>
-                    <td><strong>Lab03</strong></td>
-                    <td><p>This is same as Lab02 but with additional CSS styling.</p></td>
-                    <td><a href="./src/tasks/Lab03/index.html" title="Project Preview">Preview</a></td>
-                    <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab03/" title="Source Code">Source Code</a></td>
-                </tr>
-                <tr>
-                    <td>4.</td>
-                    <td><strong>Lab04</strong></td>
-                    <td><p>Includes same html contents with additional/advance CSS styling.</p></td>
-                    <td><a href="./src/tasks/Lab04/index.html" title="Project Preview">Preview</a></td>
-                    <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab04/" title="Source Code">Source Code</a></td>
-                </tr>
-                <tr>
-                    <td>5.</td>
-                    <td><strong>Lab05</strong></td>
-                    <td><p>Lab05 includes same contents as previous with information formatted into tables and includes advance html features i.e., forms etc.</p></td>
-                    <td><a href="./src/tasks/Lab05/index.html" title="Project Preview">Preview</a></td>
-                    <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab05/" title="Source Code">Source Code</a></td>
-                </tr>
-                <tr>
-                    <td>6.</td>
-                    <td><strong>Lab06</strong></td>
-                    <td><p>Lab06 includes same contents as previous with extra information like certificates and it uses flex box</p></td>
-                    <td><a href="./src/tasks/Lab06/index.html" title="Project Preview">Preview</a></td>
-                    <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab06/" title="Source Code">Source Code</a></td>
-                </tr>
-                <tr>
-                    <td>7.</td>
-                    <td><strong>Lab07</strong></td>
-                    <td><p>Lab07 includes advanced CSS layout techniques and responsive design principles.</p></td>
-                    <td><a href="./src/tasks/Lab07/index.html" title="Project Preview">Preview</a></td>
-                    <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab07/" title="Source Code">Source Code</a></td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
 
+    <section id="homepage-container">
+        <!-- Introduction Section -->
+        <section id="intro">
+            <div>
+                <h1>CS-234 WAD</h1>
+                <h1>Web Application Development Lab Tasks</h1>
+            </div>
+            <p>This is a homepage to <a href="https://github.com/saqibbedar/wad-lab-tasks/"><strong>CS-234 Web Application Development (WAD)</strong></a> that contains my web projects, part of my semester course <strong>CS-234 Web Application Development (WAD)</strong> and, it is progressively being developed/maintained.</p>
+        </section>
+
+        <!-- Navigation Section -->
+        <nav>
+            <ul>
+                <li>
+                    <a href="/" title="logo"><h2>WAD</h2></a>
+                    <!-- version will be updated dynamically -->
+                    <select name="version" id="version" title="version">
+                        <option value="v1.0">Version 1.0</option>
+                        <option value="v1.1">Version 1.1</option>
+                        <option value="v1.2">Version 1.2</option>
+                        <option value="v2.0" selected>Version 2.0</option>
+                    </select>
+                </li>
+                <li><a href="#projects-list" title="Projects List Section">Projects List</a></li>
+            </ul>
+        </nav>
+        
+        <!-- Projects List Section -->
+        <section id="projects-list">
+            <h1>Projects Lists</h1>
+            <hr>
+            <table>
+                <caption><strong>Lab Tasks Includes</strong></caption>
+                <!-- Table Head -->
+                <thead>
+                    <tr id="t-head">
+                        <th>S.No.</th>
+                        <th>Project Name</th>
+                        <th>Description</th>
+                        <th>Preview Link</th>
+                        <th>Source Code</th>
+                    </tr>
+                </thead>
+                <!-- Table Body: includes rows -->
+                <tbody>
+                    <tr>
+                        <td>1.</td>
+                        <td><strong>Lab01</strong></td>
+                        <td><p>Lab01 is a home page, enlist all of completed projects.</p></td>
+                        <td><a href="./index.html" title="Project Preview">Preview</a></td>
+                        <td><a href="https://github.com/saqibbedar/wad-lab-tasks/" title="Source Code">Source Code</a></td>
+                    </tr>
+                    <tr>
+                        <td>2.</td>
+                        <td><strong>Lab02</strong></td>
+                        <td><p>This includes basic use of HTML with semantics for better SEO and accessibility.</p></td>
+                        <td><a href="./src/tasks/Lab02/index.html" title="Project Preview">Preview</a></td>
+                        <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab02/" title="Source Code">Source Code</a></td>
+                    </tr>
+                    <tr>
+                        <td>3.</td>
+                        <td><strong>Lab03</strong></td>
+                        <td><p>This is same as Lab02 but with additional CSS styling.</p></td>
+                        <td><a href="./src/tasks/Lab03/index.html" title="Project Preview">Preview</a></td>
+                        <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab03/" title="Source Code">Source Code</a></td>
+                    </tr>
+                    <tr>
+                        <td>4.</td>
+                        <td><strong>Lab04</strong></td>
+                        <td><p>Includes same html contents with additional/advance CSS styling.</p></td>
+                        <td><a href="./src/tasks/Lab04/index.html" title="Project Preview">Preview</a></td>
+                        <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab04/" title="Source Code">Source Code</a></td>
+                    </tr>
+                    <tr>
+                        <td>5.</td>
+                        <td><strong>Lab05</strong></td>
+                        <td><p>Lab05 includes same contents as previous with information formatted into tables and includes advance html features i.e., forms etc.</p></td>
+                        <td><a href="./src/tasks/Lab05/index.html" title="Project Preview">Preview</a></td>
+                        <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab05/" title="Source Code">Source Code</a></td>
+                    </tr>
+                    <tr>
+                        <td>6.</td>
+                        <td><strong>Lab06</strong></td>
+                        <td><p>Lab06 includes same contents as previous with extra information like certificates and it uses flex box</p></td>
+                        <td><a href="./src/tasks/Lab06/index.html" title="Project Preview">Preview</a></td>
+                        <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab06/" title="Source Code">Source Code</a></td>
+                    </tr>
+                    <tr>
+                        <td>7.</td>
+                        <td><strong>Lab07</strong></td>
+                        <td><p>Lab07 includes advanced CSS layout techniques and responsive design principles.</p></td>
+                        <td><a href="./src/tasks/Lab07/index.html" title="Project Preview">Preview</a></td>
+                        <td><a href="https://github.com/saqibbedar/wad-lab-tasks/blob/main/src/tasks/Lab07/" title="Source Code">Source Code</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </section>
 </body>
 </html>
