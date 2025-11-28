@@ -1,0 +1,141 @@
+body {
+    padding: 3rem;
+}
+
+:root {
+    --error-outline: 2px solid red;
+    --valid-outline: 2px solid green;
+    --input-border: 1px solid #03071270;
+    --theme-color: #615fff;
+}
+
+/* error */
+.error {
+    outline: var(--error-outline);
+    border : none;
+}
+/* valid */
+.valid {
+    outline: var(--valid-outline);
+    border : none;
+}
+
+.error-line {
+    display: block;
+    color: red;
+    font-size: small;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+.show {
+    display: none;
+}
+
+#form-message {
+    margin-top: 1rem;
+    text-align: center;
+}
+#form-message .success {
+    color: green;
+    font-size: medium;
+    font-weight: 600;
+}
+
+/* form validation */
+form {
+    background-color: #0307120e;
+    width: 660px;
+    padding: 1.2rem;
+    border-radius: 8px;
+    border: .5px solid #0307120e;
+}
+.flex {
+    display: flex;
+    gap: 1rem;
+}
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+.secondpart{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+button#submit-btn {
+    font-size: 14px;
+    font-weight: 600;
+    background-color: var(--theme-color);
+    width: 100%;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+button#submit-btn:hover {
+    background-color: #7c86ff;
+}
+button#submit-btn:active {
+    scale: .98;
+}
+
+label {
+    margin-bottom: 0.5rem;
+}
+label .required {
+    color: red;
+}
+
+input {
+    display: block;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: var(--input-border);
+    border-radius: 4px;
+    width: 300px;
+    box-sizing: border-box;
+}
+input:focus {
+    outline: 1px solid var(--theme-color);
+    border: 1px solid var(--theme-color);
+}
+.secondpart input {
+    width: 100%;
+}
+
+/* styling the placeholder text */
+input::placeholder {
+    color: #03071260;
+}
+
+.policy-input  {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    input {
+        width: fit-content;
+        padding: 0;
+        margin-top: 10px;
+    }
+    input:focus {
+        outline: none;
+        border: var(--input-border);
+    }
+}
+
+@media (width <= 769px) {
+    .flex {
+        flex-direction: column;
+        gap: 5px;
+    }
+    form {
+        width: 100%;
+    }
+    input {
+        width: 100%;
+    }
+}

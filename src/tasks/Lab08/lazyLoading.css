@@ -1,0 +1,25 @@
+body{
+    padding: 3rem;
+}
+
+.container {
+    max-width: 800px;
+    width: 100%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+img {
+    width: 100%;
+    height: 600px;
+    border-radius: 8px;
+    background-color: #0307120e;
+}
+
+@media (width <= 667px) {
+    img {
+        height: auto;
+    }
+}
