@@ -13,6 +13,8 @@ This repository contains my web projects, part of my semester course **CS-234 We
 | 5. | Lab05 | Lab05 includes same contents as previous with information formatted into tables and includes advance html features i.e., forms etc. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab05/index.html) | [Source →](./src/tasks/Lab05/) |
 | 6. | Lab06 | Lab06 includes same contents as previous with information formatted into tables and includes advance html features i.e., forms etc. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab06/index.html) | [Source →](./src/tasks/Lab06/) |
 | 7. | Lab07 | Lab07 includes advanced CSS layout techniques and responsive design principles. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab07/index.html) | [Source →](./src/tasks/Lab07/) |
+| 8.1 | Lab8.1 | Lab08.1 includes lazy loading. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab08/lazyLoading.html) | [Source →](./src/tasks/Lab08/) |
+| 8.2 | Lab8.2 | Lab8.2 includes form validation | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab08/formValidation.html) | [Source →](./src/tasks/Lab08/) |
 
 # Resources
 1. [Midterm Past Paper 2022](./src/past-papers/mid/)
