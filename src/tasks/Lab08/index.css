@@ -41,6 +41,9 @@ body {
     font-weight: 600;
 }
 
+.bg-red{
+    background-color: red;
+}
 /* form validation */
 form {
     background-color: #0307120e;

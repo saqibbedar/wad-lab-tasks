@@ -62,18 +62,22 @@ form.addEventListener(
 
     if (target.id === "fname" && target.value.trim() === "") {
       errorLines[0].classList.remove("show");
+      target.classList.add("bg-red");
       validationStates.fname.isValid = false;
     }
     if (target.id === "email" && target.value.trim() === "") {
       errorLines[1].classList.remove("show");
+      target.classList.add("bg-red");
       validationStates.email.isValid = false;
     }
     if (target.id === "password" && target.value.trim() === "") {
       errorLines[2].classList.remove("show");
+      target.classList.add("bg-red");
       validationStates.password.isValid = false;
     }
     if (target.id === "confirm-password" && target.value.trim() === "") {
       errorLines[3].classList.remove("show");
+      target.classList.add("bg-red");
       validationStates.confirmPassword.isValid = false;
     }
   },
@@ -88,33 +92,36 @@ form.addEventListener(
 
     if (target.id === "fname" && target.value.trim() !== "") {
       if (!validateName(target.value)) {
-        // ← ADDED
         errorLines[0].classList.remove("show");
+        target.classList.add("bg-red");
         validationStates.fname.isValid = false;
       } else {
         errorLines[0].classList.add("show");
+        target.classList.remove("bg-red");
         validationStates.fname.isValid = true;
       }
     }
 
     if (target.id === "email" && target.value.trim() !== "") {
       if (!validateEmail(target.value)) {
-        // ← ADDED
         errorLines[1].classList.remove("show");
+        target.classList.add("bg-red");
         validationStates.email.isValid = false;
       } else {
         errorLines[1].classList.add("show");
+        target.classList.remove("bg-red");
         validationStates.email.isValid = true;
       }
     }
 
     if (target.id === "password" && target.value.trim() !== "") {
       if (!validatePassword(target.value)) {
-        // ← ADDED
         errorLines[2].classList.remove("show");
+        target.classList.add("bg-red");
         validationStates.password.isValid = false;
       } else {
         errorLines[2].classList.add("show");
+        target.classList.remove("bg-red");
         validationStates.password.isValid = true;
       }
     }
@@ -126,11 +133,12 @@ form.addEventListener(
           target.value.trim()
         )
       ) {
-        // ← ADDED
         errorLines[3].classList.remove("show");
+        target.classList.add("bg-red");
         validationStates.confirmPassword.isValid = false;
       } else {
         errorLines[3].classList.add("show");
+        target.classList.remove("bg-red");
         validationStates.confirmPassword.isValid = true;
       }
     }
@@ -150,13 +158,15 @@ form.addEventListener(
     // fname
     if (target.id === "fname" && target.value.trim() === "") {
       errorLines[0].classList.remove("show");
+      target.classList.add("bg-red");
       validationStates.fname.isValid = false;
     } else if (target.id === "fname") {
       if (!validateName(target.value)) {
-        // ← ADDED
+        target.classList.add("bg-red");
         errorLines[0].classList.remove("show");
         validationStates.fname.isValid = false;
       } else {
+        target.classList.remove("bg-red");
         errorLines[0].classList.add("show");
         validationStates.fname.isValid = true;
       }
@@ -165,14 +175,16 @@ form.addEventListener(
     // email
     if (target.id === "email" && target.value.trim() === "") {
       errorLines[1].classList.remove("show");
+      target.classList.add("bg-red");
       validationStates.email.isValid = false;
     } else if (target.id === "email") {
       if (!validateEmail(target.value)) {
-        // ← ADDED
         errorLines[1].classList.remove("show");
+        target.classList.add("bg-red");
         validationStates.email.isValid = false;
       } else {
         errorLines[1].classList.add("show");
+        target.classList.remove("bg-red");
         validationStates.email.isValid = true;
       }
     }
@@ -180,14 +192,16 @@ form.addEventListener(
     // password
     if (target.id === "password" && target.value.trim() === "") {
       errorLines[2].classList.remove("show");
+      target.classList.add("bg-red");
       validationStates.password.isValid = false;
     } else if (target.id === "password") {
       if (!validatePassword(target.value)) {
-        // ← ADDED
+        target.classList.add("bg-red");
         errorLines[2].classList.remove("show");
         validationStates.password.isValid = false;
       } else {
         errorLines[2].classList.add("show");
+        target.classList.remove("bg-red");
         validationStates.password.isValid = true;
       }
     }
@@ -198,11 +212,12 @@ form.addEventListener(
       validationStates.confirmPassword.isValid = false;
     } else if (target.id === "confirm-password") {
       if (!validateConfirmPassword(password, confirmPassword)) {
-        // ← ADDED
         errorLines[3].classList.remove("show");
+        target.classList.add("bg-red");
         validationStates.confirmPassword.isValid = false;
       } else {
         errorLines[3].classList.add("show");
+        target.classList.remove("bg-red");
         validationStates.confirmPassword.isValid = true;
       }
     }
