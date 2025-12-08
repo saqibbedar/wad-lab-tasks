@@ -1,0 +1,94 @@
+.login-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: calc(100vh - 150px);
+    width: 100%;
+}
+
+form{
+    margin-top: 60px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+form .username, form .password{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+form .password {
+    margin-top: 30px;
+    margin-bottom: 60px;
+}
+
+form label {
+    display: none;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    border: none;
+    outline: none;
+    font-size: 1.2rem;
+    padding-block: 10px;
+    border-bottom: 1px solid var(--b-clr);
+    width: 400px;
+}
+
+input:focus {
+    border-color: black;
+}
+
+form button[type="submit"] {
+    color: red;
+    background: #000;
+    margin-bottom: 70px;
+    width: 100%;
+}
+
+.login-options{
+ width: 100%;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+}
+
+.no-account{
+    margin-bottom: 60px;
+    font-size: 1rem;
+    text-align: center;
+}
+
+
+.cwg {
+    width: fit-content;
+}
+
+@media (width <= 786px) {
+    .login-container{
+        height: calc(100vh - 120px);
+    }
+    form {
+        width: 100%;
+    }
+    form .username, form .password {
+        width: 100%;
+    }
+    .input-container{
+        width: 100%;
+    }
+    input {
+        width: 100%;
+    }
+    .no-account{
+    margin-bottom: 30px;
+}
+}
