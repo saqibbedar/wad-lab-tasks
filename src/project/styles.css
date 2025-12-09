@@ -61,6 +61,100 @@ html.show-visibility{
     transition: all 0.2s ease-in-out;
 }
 
+/* top banner */
+.top-banner {
+    background-color: var(--primary-color);
+    text-align: center;
+    color: var(--secondary-color);
+    padding: var(--p2) 0;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--p2);
+}
+
+/* hidden-menu */
+.menu {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    height: calc(100vh - 70px);
+    width: 0;
+    background-color: rgba(0, 0, 0, 0.452);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 99;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
+    pointer-events: none;
+}
+
+.control-visibility {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    width: 100%;
+}
+
+.menu ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--p10) var(--p6);
+    gap: var(--p3);
+    width: 100%;
+    background-color: white;
+    height: 100%;
+}
+.menu ul li {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.menu ul li:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: var(--p3);
+}
+.menu ul li:first-child a:hover {
+    text-decoration: underline;
+}
+
+.menu ul li:last-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: var(--p3);
+}
+.menu ul li:last-child a {
+    display: flex;
+    align-items: center;
+    gap: var(--p3);
+}
+.menu ul li:last-child a:hover {
+    text-decoration: underline;
+}
+.menu ul li:last-child a svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+.menu ul li a {
+    display: flex;
+    align-items: center;
+    gap: var(--p2);
+}
+
+.top-banner .close {
+    cursor: pointer;
+    width: 16px;
+    height: 16px;
+}
 
 /* Navbar */
 nav {
@@ -95,6 +189,11 @@ nav ul > li:nth-child(3) {
     div {
         cursor: pointer;
     }
+}
+
+.shop-menu {
+    user-select: none;
+    -webkit-user-select : none;
 }
 
 /* main container */
@@ -187,6 +286,9 @@ button {
 
 /* responsive */
 @media (width <= 786px) {
+    .menu ul {
+        padding: var(--p9) var(--p6) var(--p5) var(--p6);
+    }
     /* container */
     .main-container{
         margin-block: 20px;

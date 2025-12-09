@@ -12,29 +12,54 @@
 <body>
     
     <div class="container">
+        <!-- top banner -->
+        <div class="top-banner show">
+            <p>Free Shipping on Orders Over PKR 5000</p>
+            <!-- close -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x-icon lucide-x close"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+
+        <!-- menu -->
+     <div class="menu">
+        <ul>
+            <li>
+                <a href="#">Sweaters</a>
+                <a href="#">Bottoms</a>
+                <a href="#">Hoodies</a>
+            </li>
+            <li>
+                <a href="../wad-project/index.html" title="view-cart"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag-icon lucide-shopping-bag"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg>
+                Cart</a>
+                <a href="../pages/Login.html" title="Login"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-icon lucide-user-round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+                Login</a>
+            </li>
+        </ul>
+     </div>
+
         <!-- navbar -->
         <nav>
             <ul>
-                <li>SHOP</li>
+                <li class="shop-menu">SHOP</li>
                 <li><a href="../homepage.html">LOGO</a></li>
                 <li>
-                    <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></a>
+                    <a href="#" title="search"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></a>
     
                     <a href="../pages/Login.html" title="Login" class="hide-on-mobile-screen"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-icon lucide-user-round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></a>
     
-                    <div><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag-icon lucide-shopping-bag"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg></div>
+                    <a href="../wad-project/index.html" title="view-cart"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag-icon lucide-shopping-bag"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg></a>
                 </li>
             </ul>
         </nav>
 
-        <div class="search-bar">
-            <img src="search.png" class="icon" style="margin-left: 0.8rem;">
-            <input type="text" placeholder="SEARCH PRODUCTS" class="inp">
-            <img src="filter.png" class="icon" style="margin-right: 0.8rem;">
+        <div class="search-bar" style="padding-inline: 10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+            <input type="text" style="padding-inline: 10px;" placeholder="SEARCH PRODUCTS" class="inp">
+            <img src="filter.png" class="icon" alt="" style="margin-right: 0.8rem;">
         </div>
         <p class="search-text"
-            style="margin-left: 6vw;margin-top: 6vh; font-size: medium; font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">
-            RESULTS FOR JEANS</p>
+            style="margin-left: 6vw;margin-top: 6vh; margin-bottom: 20px;">
+            RESULTS FOR JEANS
+        </p>
         <div class="imges">
             <img src="a.PNG" alt="product-img">
             <img src="b.PNG" alt="product-img">
@@ -43,17 +68,16 @@
             <img src="a.PNG" alt="product-img">
             <img src="b.PNG" alt="product-img">
             <img src="a.PNG" alt="product-img">
-    
         </div>
     
         <div class="lower-btn">
-            <button>
+            <button type="button">
                 1
             </button>
-            <button>
+            <button type="button">
                 2
             </button>
-            <button>
+            <button type="button">
                 3
             </button>
         </div>
@@ -89,5 +113,7 @@
             </div>
     </footer>
     </div>
+
+    <script src="../handleTopBanner.js" defer></script>
 </body>
 </html>
