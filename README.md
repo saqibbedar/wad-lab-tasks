@@ -16,6 +16,7 @@ This repository contains my web projects, part of my semester course **CS-234 We
 | 8.1 | Lab8.1 | Lab08.1 includes lazy loading. | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab08/lazyLoading.html) | [Source →](./src/tasks/Lab08/) |
 | 8.2 | Lab8.2 | Lab8.2 includes form validation | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/tasks/Lab08/formValidation.html) | [Source →](./src/tasks/Lab08/) |
 | 9. | Project01 | Convert figma design to HTML/CSS/JS | [Preview →](https://saqibbedar.github.io/wad-lab-tasks/src/project/homepage.html) | [Source →](./src/project) |
+| 10. | Lab09 | Backend with NodeJS | No Preview | [Source →](./src/tasks/Lab09/) |
 
 # Resources
 1. [Midterm Past Paper 2022](./src/past-papers/mid/)
