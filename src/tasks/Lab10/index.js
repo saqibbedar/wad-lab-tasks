@@ -41,5 +41,5 @@ app.get("/", (req, res)=>{
 });
 
 app.listen((process.env.PORT || 8000), ()=>{
-    console.log(`Server is working`);
+    console.log(`Server is working http://localhost:${process.env.PORT}`);
 });
