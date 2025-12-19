@@ -25,7 +25,6 @@ const connectDB = async () => {
         console.error(e);
     }
 }
-connectDB()
 
 // instance
 const app = express();
@@ -49,6 +48,7 @@ app.get("/", (req, res)=>{
 // api routes
 app.get("/api/products", async (req, res) => {
     try {
+        await connectDB(); // serverless
         const products = await Product.find({}).select("-__v -createdAt -updatedAt").lean();
         if(products) {
             return res.status(200).json({products})
@@ -61,7 +61,7 @@ app.get("/api/products", async (req, res) => {
     }
 })
 
-app.post("/api/products", async (req, res) => { 
+app.post("/api/products", connectDB, async (req, res) => { 
     
 try {
     const rawBody = req.body || {};
@@ -119,8 +119,12 @@ try {
 }
 })
 
+// for local development
+const launchApp = async () => {
+    await connectDB();
+    app.listen((process.env.PORT || 8000), ()=>{
+        console.log(`Server is working http://localhost:${process.env.PORT}`);
+    });
+}
 
-
-app.listen((process.env.PORT || 8000), ()=>{
-    console.log(`Server is working http://localhost:${process.env.PORT}`);
-});
+launchApp();
