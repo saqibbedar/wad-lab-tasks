@@ -16,7 +16,7 @@ const connectDB = async () => {
             await mongoose.connect(process.env.MONGODB_URI);
             console.log("connected to database");
         }
-    } 
+    }   
     catch (e) {
         console.error(e);
     }
@@ -33,6 +33,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // views
 app.use("/views", express.static(path.join(process.cwd(), "/views")));
+app.use("/public", express.static(path.join(process.cwd(), "/public")));
 
 
 // test route
