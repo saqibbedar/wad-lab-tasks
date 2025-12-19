@@ -42,7 +42,10 @@ app.use("/public", express.static(path.join(process.cwd(), "/public")));
 
 // test route
 app.get("/", (req, res)=>{
-    return res.send("Everything is working fine, please visit /api/products for product list or /public/views/add-product.html to add products.");
+    
+    return res.send(`Everything is working fine, please visit /api/products for product list or /public/views/add-product.html to add products. 
+        mongoURI: ${process.env.MONGODB_URI}
+        `);
 });
 
 // api routes
@@ -56,12 +59,12 @@ app.get("/api/products", async (req, res) => {
             return res.status(400).json({error: "Error while fetching records from database"});
         }
     } catch (error) {
-        console.error("Error while creating product", error);
+        console.error("Error in fetching projects details", error);
         return res.status(500).json({ error: "Internal Server Error" });
     }
 })
 
-app.post("/api/products", connectDB, async (req, res) => { 
+app.post("/api/products", async (req, res) => { 
     
 try {
     const rawBody = req.body || {};
