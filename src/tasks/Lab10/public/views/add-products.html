@@ -31,25 +31,25 @@
 <body>
     <!-- 
     {
-        "type": "Sweaters",
-        "code": "WWXS001", 
+        "productType": "Sweaters",
+        "productCode": "WWXS001", 
         "name": "Washed Cable Knit Sweater",
         "description": "Relaxed-fit sweater crafted from soft cotton yarn. Designed with a round neck, long sleeves, and a wash effect. Finished with ribbed trims. The garment has a unique appearance due to its special washing process.",
         "size": ["S", "M", "L", "XL"],
         "color": ["Anthracite Grey", "SkyBlue"],
-        "inStock": "100",
+        "quantity": "100",
         "isLimited": "false",
         "ratings": "4.0"
     },
     -->
 
     <h2>Enter Product Details</h2>
-    <form action="/api/products/add" method="post">
+    <form action="/api/products" method="post">
         <div>
-            <label for="type">Type <span class="required">*</span> </label> <input type="text" name="type" id="type" placeholder="e.g., Sweaters, Hoodies..." required>
+            <label for="productType">Type <span class="required">*</span> </label> <input type="text" name="productType" id="productType" placeholder="e.g., Sweaters, Hoodies..." required>
         </div>
         <div>
-            <label for="code">Code <span class="required">*</span> </label> <input type="text" name="code" id="code" placeholder="e.g., WWXS001, WWXH001..." required>
+            <label for="productCode">Code <span class="required">*</span> </label> <input type="text" name="productCode" id="productCode" placeholder="e.g., WWXS001, WWXH001..." required>
         </div>
         <div>
             <label for="name">Name <span class="required">*</span> </label> <input type="text" name="name" id="name" placeholder="e.g., Washed Cable Knit Sweater..." required>
@@ -64,7 +64,10 @@
             <label for="color">Color (To add many use comma)<span class="required">*</span></label> <input type="text" name="color" id="color" placeholder="e.g., red, blue..." required>
         </div>
         <div>
-            <label for="inStock">Quantity <span class="required">*</span></label> <input type="Number" name="inStock" id="inStock" min="0" placeholder="e.g., 1-100..." required>
+            <label for="quantity">Quantity <span class="required">*</span></label> <input type="Number" name="quantity" id="quantity" min="0" placeholder="e.g., 1-100..." required>
+        </div>
+        <div>
+            <label for="price">Price <span class="required">*</span></label> <input type="Number" name="price" id="price" min="0" placeholder="e.g., 1000-5000..." required>
         </div>
         <input type="submit">
     </form>
