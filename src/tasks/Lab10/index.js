@@ -32,8 +32,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // views
-app.use("/views", express.static(path.join(process.cwd(), "/views")));
-app.use("/public", express.static(path.join(process.cwd(), "/public")));
+app.use(express.static(path.join(process.cwd(), "/views")));
+app.use(express.static(path.join(process.cwd(), "/public")));
 
 
 // test route
