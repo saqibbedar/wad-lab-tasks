@@ -31,7 +31,8 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// views
+// only for local development; vercel uses public is default root dir for exposing static contents
+// get static files using baseURL/views/add-product.html
 app.use(express.static(path.join(process.cwd(), "/views")));
 app.use(express.static(path.join(process.cwd(), "/public")));
 
