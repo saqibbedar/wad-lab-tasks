@@ -51,7 +51,7 @@ app.get("/", (req, res)=>{
         </ul>
         <h3> Debugging </h3>
         <ul>
-            <li>MongoURI: ${process.env.MONGODB_URI || "NOT Found in vercel"}</li>
+            <li>MongoURI: ${process.env.MONGODB_URI ? "MONGO_URI is working":"Error in setting up MONGO_URI"}</li>
         </ul>
     `
     
