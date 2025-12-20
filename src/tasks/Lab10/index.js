@@ -46,14 +46,20 @@ app.get("/", (req, res)=>{
     let homeHTML = `
         <h1>Server is working</h1>
         <ul>
-            <li>Visit baseURL/api/products for product list <strong>OR</strong></li>
+            <li>Visit baseURL/api/products for product list</li>
             <li>Visit baseURL/views/add-product.html to add new products</li>
+            <li>Visit baseURL/api/products/:code to get product via code <strong>OR</strong></li>
+            <li>Visit baseURL/api/products/search?q=YOUR_QUERY to search any product based on name, or description</li>
         </ul>
         <h3> Debugging </h3>
         <ul>
-            <li>MongoURI: ${process.env.MONGODB_URI ? "MONGO_URI is working":"Error in setting up MONGO_URI"}</li>
+            <li>MongoURI: ${
+              process.env.MONGODB_URI
+                ? "MONGO_URI is working"
+                : "Error in setting up MONGO_URI"
+            }</li>
         </ul>
-    `
+    `;
     
     return res.type("html").send(homeHTML);
 });
@@ -61,7 +67,7 @@ app.get("/", (req, res)=>{
 // api routes
 app.get("/api/products", async (req, res) => {
     try {
-        await connectDB(); // serverless
+        // await connectDB(); // serverless
         const products = await Product.find({}).select("-__v -createdAt -updatedAt").lean();
         if(products) {
             return res.status(200).json({products})
@@ -130,6 +136,59 @@ try {
     console.error("Error while creating product", error);
     return res.status(500).json({ error: "Internal Server Error" });
 }
+})
+
+// other routes
+// search a product with type, name or description /api/search?q=<query>
+app.get("/api/products/search", async (req, res) => {
+    try {
+        const searchQuery = req.query || {};
+        const { q } = searchQuery;
+
+        console.log(q)
+        
+        if(q) {
+            const products = await Product.find({}).select("-__v -createdAt -updatedAt").lean();
+            // console.log(products)
+            let sq = q.toLowerCase(); // searchQuery
+            
+            const filteredProducts = products.filter( (p, index) => 
+                String(p.productType ?? "").toLowerCase().includes(sq) ||
+                String(p.name ?? "").toLowerCase().includes(sq) ||
+                String(p.description ?? "").toLowerCase().includes(sq)
+            );
+
+            // console.log(filteredProducts)
+            
+            if(filteredProducts.length > 0) {
+                res.status(200).json({"searchResults": filteredProducts});
+            } else {    
+                res.status(404).json({"message": `No product found for search query ${q}`});
+            }
+        } else {
+            res.status(400).json({"error": "Invalid or empty query"});
+        }
+    } catch (error) {
+        console.error("Error while fetching products via codes", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+})
+
+// product via product code
+app.get("/api/products/:code", async (req, res) => {
+    try {
+        const productCode = req.params.code.toUpperCase();
+        const products = await Product.findOne({productCode}).select("-__v -createdAt -updatedAt");
+        if(products) {
+                res.status(200).json({"productsByCode": products});
+            } else {
+            res.status(404).json({"message": `The product you requested with product code ${productCode} can't be found, please try a different correct code.`});
+            // res.status(404).json({error: "Requested product not found"});
+        }
+    } catch (error) {
+        console.error("Error while fetching products via codes", error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
 })
 
 // for local development
