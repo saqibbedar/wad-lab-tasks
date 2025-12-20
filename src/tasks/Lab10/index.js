@@ -42,10 +42,20 @@ app.use("/public", express.static(path.join(process.cwd(), "/public")));
 
 // test route
 app.get("/", (req, res)=>{
+
+    let homeHTML = `
+        <h1>Server is working</h1>
+        <ul>
+            <li>Visit baseURL/api/products for product list <strong>OR</strong></li>
+            <li>Visit baseURL/views/add-product.html to add new products</li>
+        </ul>
+        <h3> Debugging </h3>
+        <ul>
+            <li>MongoURI: ${process.env.MONGODB_URI || "NOT Found in vercel"}</li>
+        </ul>
+    `
     
-    return res.send(`Everything is working fine, please visit /api/products for product list or /public/views/add-product.html to add products. 
-        mongoURI: ${process.env.MONGODB_URI}
-        `);
+    return res.type("html").send(homeHTML);
 });
 
 // api routes
