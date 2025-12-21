@@ -59,63 +59,27 @@
 
     <main>
         <div class="page-container">
-            <h1 class="page-title">Product Summary</h1>
+            <h1 class="page-title">Your Product Cart</h1>
 
             <section class="product-grid" aria-label="Product details">
-               
-                <article class="product-media" aria-labelledby="product-title">
-                    <div class="image-frame">
-                        <button class="arrow arrow-left" aria-label="previous image">◀</button>
-
-                        <div class="image-inner">
-                            <img src="images/coat.png" alt="Product image" id="main-product-image" />
-                        </div>
-
-                        <button class="arrow arrow-right" aria-label="next image">▶</button>
-                    </div>
-                </article>
-
-               
-                <aside class="product-info">
-                    <h2 id="product-title" class="product-name">CROPPED WOOL BLEND COAT</h2>
-                    <div class="product-code">F0273/101/116-50647352</div>
-
-                    <div class="price-row">
-                        <strong>PRICE</strong>
-                        <div class="price-text">PKR 16,990</div>
-                    </div>
-
-                    <div class="section-heading">DESCRIPTION</div>
-                    <p class="description">
-                        Elevate your winter wardrobe with this Cropped Wool Blend Coat, designed to offer warmth and
-                        style in a refined silhouette. Crafted from a premium wool blend, it provides cozy comfort while
-                        maintaining a polished look. The cropped length adds modern sophistication, making it an ideal
-                        layering piece for both formal and casual occasions. Experience timeless elegance with every
-                        wear.
-                    </p>
-
-                    <dl class="meta-list">
-                        <div class="meta-row">
-                            <dt>FIT</dt>
-                            <dd>RELAXED</dd>
-                        </div>
-                        <div class="meta-row">
-                            <dt>COLORS</dt>
-                            <dd>GREY</dd>
-                        </div>
-                        <div class="meta-row">
-                            <dt>SIZE</dt>
-                            <dd>S | M | L | XL</dd>
-                        </div>
-                    </dl>
-
-                    <div class="quantity-block">
-                        <button id="decrease" class="qty-btn" aria-label="Decrease quantity">-</button>
-                        <span id="qty" class="qty-value">0</span>
-                        <button id="increase" class="qty-btn" aria-label="Increase quantity">+</button>
-                    </div>
-                </aside>
+               <table>
+                    <tr>
+                        <th>S.No.</th>
+                        <th>Type</th>
+                        <th>Name</th>
+                        <th>Size</th>
+                        <th>Color</th>
+                        <th>Price</th>
+                    </tr>
+                    <tr>
+                    </tr>
+               </table>
+                
             </section>
+
+            <div>
+                <!-- <h3>Total Amount</h3> -->
+            </div>
         </div>
     </main>
 
@@ -148,9 +112,54 @@
             <div class="footer-section footer-bottom">
                 &copy; 2025 BRANDNAME.
             </div>
-    </footer>
+        </footer>
     <script src="../global.js"></script>
-    <script src="script.js"></script>
+    <script>
+        
+        async function renderCart() {
+            const cart = getCart();
+            const productIds = Object.keys(cart);
+
+            if (productIds.length === 0) {
+                document.querySelector("table").innerHTML += `
+                <tr><td colspan="6" style="text-align:center; height: 40dvh;"><strong>Cart is empty</strong></td></tr>
+                `;
+                return;
+            }
+
+            // fetch product details
+            const res = await fetch("/api/products/bulk-ids", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ productIds })
+            });
+            
+            if(!res.ok) {
+                console.log("error", res || "")
+            }
+            
+            const products = await res.json();
+            
+            const table = document.querySelector("table");
+            
+            products.forEach((p, i) => {
+                const qty = cart[p._id].qty;
+                
+                table.innerHTML += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${p.productType}</td>
+                    <td>${p.name}</td>
+                    <td>${p.size[0]}</td>
+                    <td>${p.color[0]}</td>
+                    <td>PKR ${p.price} × ${qty}</td>
+                    </tr>
+                    `;
+                });
+            }
+            
+            renderCart();
+    </script>
     <script src="../handleTopBanner.js" defer></script>
 </body>
 </html>

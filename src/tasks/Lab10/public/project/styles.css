@@ -343,7 +343,7 @@ button {
     gap: 35px;
     padding-inline: var(--p6);
     margin-bottom: 40px;
-    margin-top: 40px;
+    margin-top: 20px;
 }
 
 .display-results .item {
@@ -356,7 +356,7 @@ button {
 }
 
 .temp-display {
-    margin-top: 40px;
+    margin-top: -20px;
     grid-column: 1/-1;
     display: flex;
     width: 100%;
@@ -372,6 +372,31 @@ button {
     margin-bottom: 30px;
 }
 
+/* add to cart */
+.cart-counter{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+.addToCart {
+    display: flex;
+    gap: var(--p4);
+    align-items: center;
+}
+.addToCart .add, .addToCart .remove {
+    font-size: 1rem;
+    width: 35px;
+    height: 35px;
+    padding: 0;
+}
+
+.addToCart .add:hover, .addToCart .remove:hover {
+    background-color: var(--pri-btn-bg);
+    color: var(--pri-btn-color);
+}
+.addToCart .add:active, .addToCart .remove:active {
+    scale: 0.95;
+}
 /* responsive */
 @media (width <= 786px) {
     .menu ul {

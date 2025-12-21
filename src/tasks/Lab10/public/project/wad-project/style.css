@@ -19,149 +19,31 @@ body {
 main {
     width: 100%;
     max-width: 100%;
-    padding: 24px;
+    padding: var(--p6);
     overflow: hidden;
 }
 
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+td, th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+tr:hover {background-color: #e7e7e7;}
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #000000;
+  color: white;
+}
 
 .page-title {
     font-size: 34px;
     margin: 28px 0;
-    font-weight: 700;
-}
-
-.product-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 28px;
-    align-items: start;
-}
-
-.product-media .image-frame {
-    background: #efefef;
-    border-radius: 12px;
-    padding: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    min-height: 420px;
-}
-
-.image-inner {
-    width: 360px;
-    height: 360px;
-    background: #efefef;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.image-inner img {
-    max-width: 100%;
-    max-height: 100%;
-    display: block;
-    object-fit: fill;
-}
-
-
-.arrow {
-    background: transparent;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 8px 12px;
-}
-
-.product-info {
-    padding-top: 12px;
-    line-height: 1.2;
-}
-
-.product-name {
-    font-size: 18px;
-    letter-spacing: 0.5px;
-    margin: 0 0 6px 0;
-    font-weight: 700;
-}
-
-.product-code {
-    color: var(--muted);
-    font-size: 13px;
-    margin-bottom: 18px;
-}
-
-.price-row {
-    display: flex;
-    align-items: baseline;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.price-text {
-    font-weight: 700;
-    font-size: 18px;
-}
-
-.section-heading {
-    font-weight: 700;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    font-size: 14px;
-}
-
-.description {
-    font-size: 13px;
-    color: #111;
-    margin: 0 0 16px 0;
-    max-width: 380px;
-}
-
-.meta-list {
-    margin: 0 0 18px 0;
-}
-
-.meta-row {
-    display: flex;
-    gap: 12px;
-    margin: 6px 0;
-}
-
-.meta-row dt {
-    font-weight: 700;
-    width: 80px;
-    font-size: 13px;
-}
-
-.meta-row dd {
-    margin: 0;
-    font-size: 13px;
-    color: var(--muted);
-}
-
-.quantity-block {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 18px;
-    background: transparent;
-}
-
-.qty-btn {
-    background: var(--light-gray);
-    border: none;
-    padding: 8px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.qty-value {
-    min-width: 26px;
-    text-align: center;
-    display: inline-block;
     font-weight: 700;
 }
 
@@ -173,113 +55,11 @@ main {
 
     .page-container {
         width: 100%;
-        padding: 0 15px;
     }
 
     .page-title {
-        font-size: 15px;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
-
-    .product-grid {
-        display: block;
-        width: 100%;
-    }
-
-    .image-frame {
-        width: 100%;
-        background: #e8e8e8;
-        height: 300px;
-        border-radius: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 20px;
-    }
-
-    .image-inner img {
-        width: 150px;
-        height: auto;
-        display: block;
-        margin: 0 auto;
-    }
-
-    .arrow {
-        background: none;
-        border: none;
-        font-size: 22px;
-        cursor: pointer;
-    }
-
-    .quantity-block {
-        width: 100%;
-        height: 50px;
-        background: #e8e8e8;
-        border-radius: 25px;
-        margin: 20px 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 25px;
-    }
-
-    .qty-btn {
-        background: none;
-        border: none;
-        font-size: 22px;
-        cursor: pointer;
-    }
-
-    .qty-value {
         font-size: 20px;
         font-weight: bold;
-    }
-
-    .product-info {
-        margin-top: 10px;
-        width: 100%;
-    }
-
-    .product-name {
-        font-size: 14px;
-        font-weight: bold;
-        margin-bottom: 3px;
-    }
-
-    .product-code {
-        font-size: 11px;
-        margin-bottom: 12px;
-    }
-
-    .price-row strong {
-        font-size: 12px;
-    }
-
-    .price-text {
-        font-size: 12px;
         margin-bottom: 15px;
-    }
-
-    .section-heading {
-        margin: 15px 0 5px;
-        font-size: 12px;
-        font-weight: bold;
-    }
-
-    .description {
-        font-size: 12px;
-        line-height: 1.35;
-    }
-
-    .meta-list dt,
-    .meta-list dd {
-        font-size: 12px;
-    }
-
-    .meta-row {
-        display: flex;
-        justify-content: space-between;
-        margin: 6px 0;
     }
 }

@@ -91,36 +91,96 @@
             </div>
     </footer>
     <script>
+        let displayResults = document.querySelector(".display-results");
         (async function searchProduct(q="true"){
             const API_URL = `/api/products/${q}`;
-            const res = await fetch(API_URL);
-            if(!res.ok) {
-                console.log("no results found");
-            } 
-            const data = await res.json()
-            if(data?.products?.length === 0){
-                console.log(data.message)
-                document.querySelector(".temp-display").textContent = "No New Product Available, visit home to see available products!";
-                return;
+            try {
+                const res = await fetch(API_URL);
+                if(!res.ok) {
+                    console.log("no results found");
+                } 
+                const data = await res.json()
+                if(data?.products?.length === 0){
+                    console.log(data.message)
+                    document.querySelector(".temp-display").textContent = "No New Product Available, visit home to see available products!";
+                    return;
+                }
+                let collector = "";
+                data?.products?.map(r => 
+                    collector += `
+                     <div class="item" data-product-id="${r._id}">
+                            ${ r.isNewArrival ? "<h4 style='color: red;'>New Arrival</h4>" :    "" }
+                            <h4>${r.name}</h4>
+                            <p><strong>Description:</strong> ${r.description}</p>
+                            <p><strong>Type:</strong> ${r.productType}</p>
+                            <p><strong>InStock:</strong> <span class="inStock">${r.quantity}<span></p>
+                            <p><strong>Size:</strong> ${r.size}</p>
+                            <p><strong>Colors:</strong> ${r.color}</p>
+                            <p><strong>Price:</strong> ${r.price} PKR</p>
+                            <div class="cart-counter">
+                                <strong>Add to cart:</strong>
+                                <div class="addToCart">
+                                    <button class="remove">-</button>
+                                    <p class="amount">0</p>
+                                    <button class="add">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                )
+                displayResults.innerHTML = collector;
+
+                const cart = getCart();
+
+                document.querySelectorAll(".item").forEach(card => {
+                const productId = card.dataset.productId;
+                if (!cart[productId]) return;
+
+                const qtyElem = card.querySelector(".amount");
+                const stockElem = card.querySelector(".inStock");
+
+                const qty = cart[productId].qty;
+
+                qtyElem.textContent = qty;
+                stockElem.textContent =
+                    Math.max(0, Number(stockElem.textContent) - qty);
+                });
+                            } catch (error) {
+                console.error("error while fetching new-arrivals", error);
+            } finally {
+                displayResults.addEventListener("click", (e) => {
+                const btn = e.target;
+                if (btn.nodeName !== "BUTTON") return;
+
+                const productCard = btn.closest(".item");
+                if (!productCard) return;
+
+                const productId = productCard.dataset.productId;
+
+                const qtyElem = productCard.querySelector(".amount");
+                const stockElem = productCard.querySelector(".inStock");
+
+                let qty = Number(qtyElem.textContent);
+                let stock = Number(stockElem.textContent);
+
+                if (btn.classList.contains("add")) {
+                    if (stock <= 0) return;
+                    qty++;
+                    stock--;
+                    updateCart(productId, +1);
+                }
+
+                if (btn.classList.contains("remove")) {
+                    if (qty <= 0) return;
+                    qty--;
+                    stock++;
+                    updateCart(productId, -1);
+                }
+
+                qtyElem.textContent = qty;
+                stockElem.textContent = stock;
+                });
             }
-            let collector = "";
-            data?.products?.map(r => 
-                collector += `
-                <div class="item">
-                    ${ r.isNewArrival ? "<h4 style='color: red;'>New Arrival</h4>" :    "" }
-                    <h4>${r.name}</h4>
-                    <p><strong>Description:</strong> ${r.description}</p>
-                    <p><strong>Type:</strong> ${r.productType}</p>
-                    <p><strong>InStock:</strong> ${r.quantity}</p>
-                    <p><strong>Size:</strong> ${r.size}</p>
-                    <p><strong>Colors:</strong> ${r.color}</p>
-                    <p><strong>Price:</strong> ${r.price} PKR</p>
-                </div>
-                `
-            )
-            
-            let displayResults = document.querySelector(".display-results");
-            displayResults.innerHTML = collector;
         })()
     </script>
     <script src="../global.js"></script>

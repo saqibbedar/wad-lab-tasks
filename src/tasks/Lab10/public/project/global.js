@@ -26,9 +26,12 @@ if (userInfo.isLoggedIn) {
             alert(res.error || "Logout Failed");
           }
           localStorage.removeItem("user_login_info");
+          localStorage.removeItem("APP_CART");
           alert("Logged out successfully");
           window.location.reload();
         } catch (error) {
+          localStorage.removeItem("user_login_info");
+          localStorage.removeItem("APP_CART");
           console.error("Logout error: ", error);
           alert("Server error");
         }
@@ -41,4 +44,32 @@ if (userInfo.isLoggedIn) {
 }
 
 
-const globalQuery = "";
+const CART_KEY = "APP_CART";
+
+function getCart() {
+  return JSON.parse(localStorage.getItem(CART_KEY)) || {};
+}
+
+function saveCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
+
+function updateCart(productId, delta) {
+  const cart = getCart();
+
+  if (!cart[productId]) {
+    cart[productId] = { qty: 0 };
+  }
+
+  cart[productId].qty += delta;
+
+  if (cart[productId].qty <= 0) {
+    delete cart[productId];
+  }
+
+  saveCart(cart);
+}
+
+function clearCart() {
+  localStorage.removeItem(CART_KEY);
+}
