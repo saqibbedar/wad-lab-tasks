@@ -46,6 +46,9 @@
     <h2>Enter Product Details</h2>
     <form action="/api/products" method="post">
         <div>
+            <label for="isNewArrival">IsNewArrival? <span class="required">*</span> </label> <input type="text" name="isNewArrival" id="isNewArrival" placeholder="yes or no" required>
+        </div>
+        <div>
             <label for="productType">Type <span class="required">*</span> </label> <input type="text" name="productType" id="productType" placeholder="e.g., Sweaters, Hoodies..." required>
         </div>
         <div>

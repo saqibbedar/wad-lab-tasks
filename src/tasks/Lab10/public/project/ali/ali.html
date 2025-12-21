@@ -134,6 +134,7 @@
             data.searchResults.map(r => 
                 collector += `
                 <div class="item">
+                    ${ r.isNewArrival && "<h4 style='color: red;'>New Arrival</h4>" }
                     <h4>${r.name}</h4>
                     <p><strong>Description:</strong> ${r.description}</p>
                     <p><strong>Type:</strong> ${r.productType}</p>

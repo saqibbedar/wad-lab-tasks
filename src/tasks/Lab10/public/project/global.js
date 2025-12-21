@@ -1,6 +1,6 @@
 let userProfileIconArea = document.getElementById("user-profile");
 let currentLoginUrl = userProfileIconArea.href;
-const userInfo = JSON.parse(localStorage.getItem("user_login_info"));
+const userInfo = JSON.parse(localStorage.getItem("user_login_info")) || false;
 const toggleVisibility = false;
 if (userInfo.isLoggedIn) {
   userProfileIconArea.href = "#";
@@ -39,3 +39,6 @@ if (userInfo.isLoggedIn) {
   userProfileIconArea.title = "Login";
   userProfileIconArea.style.cursor = "pointer";
 }
+
+
+const globalQuery = "";

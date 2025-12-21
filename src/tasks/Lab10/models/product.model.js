@@ -10,7 +10,8 @@ const productSchema = new Schema({
   price: {type: Number, required: true},
   size: {type: []},
   color: {type: []},
-  quantity: {type: Number}
+  quantity: {type: Number},
+  isNewArrival: {type: Boolean, required: true, index: true, default: false}
 }, {collection: "products", timestamps: true, });
 
 export default model.Product || model("Product", productSchema);

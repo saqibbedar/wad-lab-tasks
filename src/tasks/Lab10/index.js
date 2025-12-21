@@ -62,7 +62,7 @@ app.get("/", (req, res) => {
         </ul>
         <h1>Wad Project Access</h1>
         <ul>
-          <li>Visit baseURL/project/homepage.html for project access</li>
+          <li>Visit baseURL/project/homepage.html for project access.</li>
         </ul>
         <h3> Debugging </h3>
         <ul>
@@ -82,6 +82,28 @@ app.get("/api/products", async (req, res) => {
   try {
     // await connectDB(); // serverless
     const products = await Product.find({})
+      .select("-__v -createdAt -updatedAt")
+      .lean();
+    if (products) {
+      return res.status(200).json({ products });
+    } else {
+      return res
+        .status(400)
+        .json({ error: "Error while fetching records from database" });
+    }
+  } catch (error) {
+    console.error("Error in fetching projects details", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// new arrivals
+app.get("/api/products/:q", async (req, res) => {
+  try {
+    const q = req.params.q;
+    let isNewArrival = q === "true" ? true : false;
+    console.log(isNewArrival)
+    const products = await Product.find({isNewArrival})
       .select("-__v -createdAt -updatedAt")
       .lean();
     if (products) {
@@ -125,6 +147,7 @@ app.post("/api/products", async (req, res) => {
         color,
         quantity,
         price,
+        isNewArrival
       } = rawBody;
 
       // validation
@@ -151,6 +174,7 @@ app.post("/api/products", async (req, res) => {
         color: colorArray,
         quantity,
         price,
+        isNewArrival: isNewArrival.toLowerCase() === "yes" ? true : false
       };
 
       const newProduct = new Product({ ...productPayload });
