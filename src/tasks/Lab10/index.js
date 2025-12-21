@@ -62,7 +62,7 @@ app.get("/", (req, res) => {
         </ul>
         <h1>Wad Project Access</h1>
         <ul>
-          <li>Visit baseURL/project/homepage.html for project access.</li>
+          <li>Visit baseURL/project/homepage.html for project access</li>
         </ul>
         <h3> Debugging </h3>
         <ul>
@@ -97,27 +97,6 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-// new arrivals
-app.get("/api/products/:q", async (req, res) => {
-  try {
-    const q = req.params.q;
-    let isNewArrival = q === "true" ? true : false;
-    console.log(isNewArrival)
-    const products = await Product.find({isNewArrival})
-      .select("-__v -createdAt -updatedAt")
-      .lean();
-    if (products) {
-      return res.status(200).json({ products });
-    } else {
-      return res
-        .status(400)
-        .json({ error: "Error while fetching records from database" });
-    }
-  } catch (error) {
-    console.error("Error in fetching projects details", error);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
 
 app.post("/api/products", async (req, res) => {
   try {
@@ -196,7 +175,7 @@ app.get("/api/products/search", async (req, res) => {
     const searchQuery = req.query || {};
     const { q } = searchQuery;
 
-    console.log(q);
+    // console.log(q);
 
     if (q) {
       const products = await Product.find({})
@@ -235,6 +214,28 @@ app.get("/api/products/search", async (req, res) => {
     }
   } catch (error) {
     console.error("Error while fetching products via codes", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// new arrivals
+app.get("/api/products/:q", async (req, res) => {
+  try {
+    const q = req.params.q;
+    let isNewArrival = q === "true" ? true : false;
+    console.log("api/products/:q ",isNewArrival)
+    const products = await Product.find({isNewArrival})
+      .select("-__v -createdAt -updatedAt")
+      .lean();
+    if (products) {
+      return res.status(200).json({ products });
+    } else {
+      return res
+        .status(400)
+        .json({ error: "Error while fetching records from database" });
+    }
+  } catch (error) {
+    console.error("Error in fetching projects details", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
