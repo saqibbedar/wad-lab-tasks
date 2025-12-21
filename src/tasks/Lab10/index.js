@@ -267,64 +267,55 @@ app.get("/api/products/:code", async (req, res) => {
 app.post("/api/login", async (req, res) => {
   try {
     const { username, password } = req.body || {};
-    // console.log(req.body);
+
     if (!username || !password) {
       return res
         .status(400)
         .json({ error: "username and password are required" });
     }
-    if (
-      password.length < 5 ||
-      password.length > 8 ||
-      username.length < 5 ||
-      username.length > 15
-    ) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Incorrect username or password length, minimum length allowed is 5 and max 15",
-        });
-    }
-    const user = await User.findOne({ username })
-      .select("-__v -createdAt -updatedAt")
-      .lean();
+
+    const user = await User.findOne({ username });
     if (!user) {
       return res
         .status(404)
         .json({ error: "No account found with provided username" });
     }
+
     const isMatched = await comparePassword(password, user.password);
     if (!isMatched) {
       return res.status(401).json({ error: "Password does not match" });
     }
 
-    // raw token
+    // delete old sessions
+    await Session.deleteMany({ user: user._id });
+
     const token = crypto.randomBytes(32).toString("hex");
     const tokenExpiryTime = 24 * 60 * 60 * 1000;
+
     await Session.create({
       token,
-      userId: user._id,
-      expiresAt: new Date(Date.now()) + tokenExpiryTime,
+      user: user._id,
+      expiresAt: new Date(Date.now() + tokenExpiryTime),
     });
 
     res.cookie("auth-token", token, {
       httpOnly: true,
       secure: false,
-      sameSite: "strict",
+      sameSite: "lax",
       maxAge: tokenExpiryTime,
     });
-    const payload = {
-      _id: user._id,
-      username: user.username,
-      isLoggedIn: true
-    };
-    return res
-      .status(200)
-      .json({ message: "Login successfully", user: payload });
+
+    res.status(200).json({
+      message: "Login successfully",
+      user: {
+        _id: user._id,
+        username: user.username,
+        isLoggedIn: true,
+      },
+    });
   } catch (error) {
     console.error("Error while logging user in", error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -375,6 +366,23 @@ app.post("/api/signup", async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// bulk request
+app.post("/api/products/bulk-ids", async (req, res) => {
+  const { productIds } = req.body;
+
+  const products = await Product.find({
+    _id: { $in: productIds },
+  }).lean();
+
+  res.json(products);
+});
+
+app.get("/api/test", authMiddleware, async (req, res) => {
+  const userId = req.user._id || "";
+  console.log(userId);
+  return res.send(`userId=${userId}`)
+})
 
 // profile
 // app.get("/api/profile/username", authMiddleware, async (req, res) => {
