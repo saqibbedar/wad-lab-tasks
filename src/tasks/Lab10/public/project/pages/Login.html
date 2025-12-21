@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="login.css">
+    <title>Login</title>
+</head>
+<body>
+    <!-- navbar -->
+    <nav>
+        <ul>
+            <li><a href="../homepage.html" title="Home">LOGO</a></li>
+            <li>
+                <a href="../ali/ali.html" title="search"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- main container -->
+    <div class="main-container">
+        <div class="login-container">
+            <h1 class="login-singup-title">Login</h1>
+            <form action="#" method="post">
+                <div class="username">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-icon lucide-user-round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
+                    
+                    <div class="input-container">
+                        <label for="username">USERNAME</label>
+                        <input type="text" id="username" name="username" placeholder="USERNAME" minlength="5" maxlength="15" required>
+                    </div>
+                </div>
+
+                <div class="password">
+                    <span class="password-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></svg>
+                    </span>
+                    <div class="input-container">
+                        <label for="password">PASSWORD</label>
+                        <input type="password" id="password" name="password"  placeholder="PASSWORD" minlength="5" maxlength="8" required >
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn pri-btn" id="formSubmitButton" autofocus>Login</button>
+            </form>
+           <div class="login-options">
+            <p class="no-account">DON'T HAVE AN ACCOUNT?</p>
+            <button type="button" class="btn caa" id="caa">Create an account</button>
+           </div>
+        </div>
+    </div>
+    <script>
+        let isSigningUp = false;
+        let signUpLoginButtonElem = document.getElementById("caa");
+        let loginSingUpTitleElement = document.querySelector(".login-singup-title");
+        let alreadyAccountElement = document.querySelector(".no-account");
+        let formSubmitButton = document.getElementById("formSubmitButton");
+        let form = document.querySelector("form");
+        let isLoading = false;
+
+        signUpLoginButtonElem.addEventListener("click", (e) => {
+            isSigningUp = !isSigningUp;
+            if(isSigningUp) {
+                loginSingUpTitleElement.textContent = "Sign Up";
+                formSubmitButton.textContent = isLoading ? "Signing..." : "Signup";    
+                alreadyAccountElement.textContent = "ALREADY HAVE AN ACCOUNT?";
+                signUpLoginButtonElem.textContent = "Login";
+            } else {
+                loginSingUpTitleElement.textContent = "Login";
+                formSubmitButton.textContent = isLoading ? "Logging..." : "Login";    
+                alreadyAccountElement.textContent = "DON'T HAVE AN ACCOUNT?";
+                signUpLoginButtonElem.textContent = "Create an account";    
+            }
+        });
+        
+        function handleSubmitButtonLoading() {
+            if(isSigningUp) {
+                formSubmitButton.textContent = isLoading ? "Signing..." : "Signup";    
+            } else {
+                formSubmitButton.textContent = isLoading ? "Logging..." : "Login";    
+            }
+        }
+
+        const isLocalDev = false; // change it for vercel, when upload code to github
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            const payload = Object.fromEntries(formData.entries());
+
+            const endpoint = isSigningUp ? "/api/signup" : "/api/login";
+            isLoading = true;
+            handleSubmitButtonLoading();
+            try {
+                const res = await fetch(endpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload)
+                })
+                const data = await res.json();
+                if(!res.ok) {
+                    alert(data.error || "Unable to log you in, Please try again");
+                    return;
+                }
+                localStorage.setItem("user_login_info", JSON.stringify(data.user));
+                window.location.href = isLocalDev ? "/public/project/homepage.html" : "/project/homepage.html";
+            } catch (error) {
+                console.error("Login failed", error);
+                alert("Server error");
+            } finally {
+                isLoading = false;
+                handleSubmitButtonLoading();
+            }
+        })
+
+    </script>
+    <script src="./login.js"></script>
+</body>
+</html>
