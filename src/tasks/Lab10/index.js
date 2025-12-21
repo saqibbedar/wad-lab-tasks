@@ -62,7 +62,7 @@ app.get("/", (req, res) => {
         </ul>
         <h1>Wad Project Access</h1>
         <ul>
-          <li>Visit baseURL/project/homepage.html for project </li>
+          <li>Visit baseURL/project/homepage.html for project access</li>
         </ul>
         <h3> Debugging </h3>
         <ul>
