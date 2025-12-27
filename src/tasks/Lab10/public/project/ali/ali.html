@@ -36,10 +36,14 @@
         </ul>
      </div>
 
+     <div class="shop-menu-mobile-version">
+        <div class="shop-menu" title="menu">SHOP</div>
+     </div>
+
         <!-- navbar -->
         <nav>
             <ul>
-                <li class="shop-menu">SHOP</li>
+                <li class="shop-menu hide-on-mobile-screen">SHOP</li>
                 <li><a href="../homepage.html">LOGO</a></li>
                 <li>
                     <a href="#" title="search"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></a>
@@ -49,6 +53,7 @@
                         <div class="loggedInUserInfo">
                             <div><strong>Account Id: </strong> <p class="account-id"></p></div>
                             <div><strong>Username: </strong> <p class="account-username"></p></div>
+                            <a href="/admin/dashboard.html" class="admin-dashboard-button">Admin Dashboard</a>
                             <button class="logout_user">Logout</button>
                         </div>
                     </a>
@@ -66,23 +71,19 @@
         </div>
         <p class="search-text">
         </p>
+
+        <!-- main data container -->
         <div class="display-results">
             <div class="temp-display">
                 <p>Type your query and press Enter to search products.</p>
             </div>
         </div>
     
-        <div class="lower-btn">
-            <button type="button" disabled>
-                1
+        <!-- <div class="lower-btn">
+            <button type="button" class="loadmore" disabled>
+                Load More
             </button>
-            <button type="button" disabled>
-                2
-            </button>
-            <button type="button" disabled>
-                3
-            </button>
-        </div>
+        </div> -->
 
          <!-- footer -->
     <footer class="footer">
@@ -113,122 +114,89 @@
             <div class="footer-section footer-bottom">
                 &copy; 2025 BRANDNAME.
             </div>
-    </footer>
+        </footer>
     </div>
     <script>
-        let responseFlag = false;
-        let displayResults = document.querySelector(".display-results");
-        async function searchProduct(q="Hoodies"){
+
+        let displayResults = document.querySelector(".display-results"); // main container to display results 
+
+        // search product function
+        async function searchProduct(q="Hoodies", isLoadMore=false){
             const API_URL = `/api/products/search?q=${q}`;
             try {
+                // fetch data from server
                 const res = await fetch(API_URL);
                 if(!res.ok) {
                     console.log("no results found");
                 } 
                 const data = await res.json()
+
+                // handle no results found
                 if(!Array.isArray(data.searchResults) || data.searchResults.length === 0){
                     console.log(data.message)
                     document.querySelector(".search-text").innerHTML = `NO RESULTS FOUND FOR: <strong>${q}</strong>`;
-                    document.querySelector(".temp-display").textContent = "Please try searching for something else.";
                     return;
                 }
-                responseFlag = true;
+
+                // console.log(data.searchResults);
+
                 document.querySelector(".search-text").innerHTML = `RESULTS FOR: <strong>${q}</strong>`;
                 let collector = "";
+
+                // r = result
+                // build html for each product
                 data.searchResults.map(r => 
                     collector += `
                     <div class="item" data-product-id="${r._id}">
+                        <img data-src="${r.image?.url}" src="" alt="${r.name}" />
                         ${ r.isNewArrival ? "<h4 style='color: red;'>New Arrival</h4>" :    "" }
                         <h4>${r.name}</h4>
-                        <p><strong>Description:</strong> ${r.description}</p>
+                        <p class="webkit-box"><strong>Description:</strong> ${r.description}</p>
                         <p><strong>Type:</strong> ${r.productType}</p>
                         <p><strong>InStock:</strong> <span class="inStock">${r.quantity}<span></p>
                         <p><strong>Size:</strong> ${r.size}</p>
                         <p><strong>Colors:</strong> ${r.color}</p>
                         <p><strong>Price:</strong> ${r.price} PKR</p>
-                        <div class="cart-counter">
-                            <strong>Add to cart:</strong>
-                            <div class="addToCart">
-                                <button class="remove">-</button>
-                                <p class="amount">0</p>
-                                <button class="add">+</button>
-                            </div>
-                        </div>
                     </div>
                     `
-                )
+                );
+                
+                // insert into DOM
                 displayResults.innerHTML = collector;
+                
+                // a little scroll effect to add images loading smoothly
+                window.scrollTo({
+                    top: 2,
+                    left: 0,
+                    behavior: 'smooth'
+                })
 
-                const cart = getCart();
-
-                document.querySelectorAll(".item").forEach(card => {
-                const productId = card.dataset.productId;
-                if (!cart[productId]) return;
-
-                const qtyElem = card.querySelector(".amount");
-                const stockElem = card.querySelector(".inStock");
-
-                const qty = cart[productId].qty;
-
-                qtyElem.textContent = qty;
-                stockElem.textContent =
-                    Math.max(0, Number(stockElem.textContent) - qty);
-                });
             } catch (error) {
                 console.error("Error while searching products", error);
                 alert("Sorry, products were not found due to server error, we are fixing the issue, please try again later.");
             } finally {
                 // add to cart logic
-                if(responseFlag) {
-                    // console.log(displayResults.children[0].dataset.productId)
-                    displayResults.addEventListener("click", (e) => {
-                        const btn = e.target;
-                        if (btn.nodeName !== "BUTTON") return;
-
-                        const productCard = btn.closest(".item");
-                        if (!productCard) return;
-
-                        const productId = productCard.dataset.productId;
-
-                        const qtyElem = productCard.querySelector(".amount");
-                        const stockElem = productCard.querySelector(".inStock");
-
-                        let qty = Number(qtyElem.textContent);
-                        let stock = Number(stockElem.textContent);
-
-                        if (btn.classList.contains("add")) {
-                            if (stock <= 0) return;
-                            qty++;
-                            stock--;
-                            updateCart(productId, +1);
-                        }
-
-                        if (btn.classList.contains("remove")) {
-                            if (qty <= 0) return;
-                            qty--;
-                            stock++;
-                            updateCart(productId, -1);
-                        }
-
-                        qtyElem.textContent = qty;
-                        stockElem.textContent = stock;
-                        });
-                    }
+                setupAddToCartButtons();
             }
         }
+        
         let queryInput = "";
-        const searchInput = document.querySelector(".inp");
-        searchInput.addEventListener("input", (e)=>{
-            queryInput = e.target.value;
-        });
+        // search once enter key is pressed
         window.addEventListener("keydown", (e)=>{
             if (e.key === "Enter" && e.target.value.trim()) {
-                searchProduct(e.target.value.trim());
+                queryInput = e.target.value.trim();
+                searchProduct(queryInput);
             }
         });
+
+        // handle cart logic
+        function setupAddToCartButtons(){
+            console.log("Setting up add to cart buttons...");
+        }
 
     </script>
     <script src="../global.js"></script>
+    <script src="../app.js" defer></script>
     <script src="../handleTopBanner.js" defer></script>
 </body>
 </html>

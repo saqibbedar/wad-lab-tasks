@@ -31,6 +31,7 @@ document.querySelectorAll(".img-container").forEach((container) => {
   container.addEventListener("scroll", loadImages);
 });
 
+
 // show HTML, if js has loaded the initial images.
 document.addEventListener("DOMContentLoaded", () => {
   loadImages();

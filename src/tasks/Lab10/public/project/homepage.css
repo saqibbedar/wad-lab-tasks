@@ -8,6 +8,7 @@
 }
 .img-item {
     position: relative;
+    cursor: pointer;
 }
 .img-item .ratings {
     position: absolute;

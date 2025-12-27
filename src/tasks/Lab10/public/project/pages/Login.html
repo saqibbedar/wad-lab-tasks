@@ -106,7 +106,7 @@
                     return;
                 }
                 localStorage.setItem("user_login_info", JSON.stringify(data.user));
-                window.location.href = isLocalDev ? "/public/project/homepage.html" : "/project/homepage.html";
+                window.location.href = "/";
             } catch (error) {
                 console.error("Login failed", error);
                 alert("Server error");

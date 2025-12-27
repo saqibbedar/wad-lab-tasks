@@ -15,39 +15,41 @@ topBanner.lastElementChild.addEventListener("click", () => {
 });
 
 
-// handle menu
-let previousScrollYPosition; // preserve last scroll position
+// handle menu (safe + works after resize)
+let previousScrollYPosition = 0;
 
-document.querySelector(".shop-menu").addEventListener("click", (e)=>{
-  let menu = document.querySelector(".menu");
-  menu.classList.toggle("control-visibility");
-  if(menu.classList.contains("control-visibility")) {
-    e.target.textContent = "Close";
+const menu = document.querySelector(".menu");
+const shopMenuButtons = document.querySelectorAll(".shop-menu");
+
+const setShopText = (text) => {
+  shopMenuButtons.forEach((btn) => (btn.textContent = text));
+};
+
+const toggleMenu = () => {
+  if (!menu) return;
+
+  const isOpen = menu.classList.toggle("control-visibility");
+
+  if (isOpen) {
+    setShopText("Close");
     document.body.style.overflow = "hidden";
+    previousScrollYPosition = window.scrollY || document.documentElement.scrollTop || 0;
 
-    // save the last location where user scrolled
-    previousScrollYPosition = window.scrollY || document.documentElement.scrollTop;
-    // console.log(previousScrollYPosition)
-
-    // scroll to top when user is exploring menu
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth"
-    });
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   } else {
-    e.target.textContent = "SHOP";
-    document.body.style.overflow = "auto"
+    setShopText("SHOP");
+    document.body.style.overflow = "auto";
 
-    // console.log(previousScrollYPosition)
-    // send back to original position after menu exploration is done
-    if(previousScrollYPosition > 0) {
-      window.scrollTo({
-        top: previousScrollYPosition,
-        left: 0,
-        behavior: "smooth",
-      });
-      previousScrollYPosition = 0;
-    }
+    const y = previousScrollYPosition;
+    previousScrollYPosition = 0;
+
+    if (y > 0) window.scrollTo({ top: y, left: 0, behavior: "smooth" });
   }
-})
+};
+
+shopMenuButtons.forEach((btn) => {
+  btn.addEventListener("click", (e) => {
+    // ensure we always change the right element(s)
+    toggleMenu();
+  });
+});

@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const productSchema = new Schema({
+  image: {type: Schema.Types.ObjectId, ref: "File"},
   productType: { type: String, required: true, index: true },
   productCode: { type: String, required: true, uppercase: true, index: true, unique: true },
   name: { type: String, required: true },
