@@ -43,7 +43,7 @@ const connectDB = async () => {
 const app = express();
 
 // determine environment
-const isLocalDev = false;
+const isLocalDev = true;
 
 // middlewares
 app.use(express.json());
