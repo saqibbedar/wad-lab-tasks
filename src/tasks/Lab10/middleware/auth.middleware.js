@@ -2,7 +2,7 @@ import Session from "../models/session.model.js";
 import { configDotenv } from "dotenv";
 configDotenv();
 
-const isLocalDev = false;
+const isLocalDev = process.env.NODE_ENV === "development";
 
 export default async function authMiddleware(req, res, next) {
   const token = req.cookies["auth-token"];
