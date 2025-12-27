@@ -43,7 +43,7 @@ const connectDB = async () => {
 const app = express();
 
 // determine environment
-const isLocalDev = Boolean(process.env.VERCEL_ENV) ? false : true;
+const isLocalDev = false;
 
 // middlewares
 app.use(express.json());
@@ -467,10 +467,10 @@ app.post("/api/products/bulk-ids", async (req, res) => {
 // get static files using baseURL/views/add-products.html
 // serving static files after api to avoid express not found error
 
-// for admin protected routes
-app.use("/public/admin", authMiddleware, adminMiddleware(), express.static(path.join(process.cwd(), "/public/admin"))); 
-// for project static files
-app.use("/public/project", express.static(path.join(process.cwd(), "/public/project")));
+// views are now added into admin for product crud operations.
+app.use("/admin", authMiddleware, adminMiddleware(), express.static(path.join(process.cwd(), "/admin"))); 
+// for local development only
+app.use("/public", express.static(path.join(process.cwd(), "/public")));
 
 // for local development
 const launchApp = async () => {

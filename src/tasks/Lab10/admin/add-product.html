@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Products</title>
+    <style>
+        .required {
+            color: red;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: fit-content;
+        }
+        input, textarea {
+            width: 100%;
+        }
+        div, label {
+            display: flex;
+        }
+        div {
+            gap: 8px;
+        }
+        label {
+            gap: 4px;
+        }
+    </style>
+</head>
+<body>
+    <button type="button" onclick="window.location.href='/'">Home</button>
+    <button type="button" onclick="window.location.href='/admin/dashboard.html'">Dashboard</button>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>Product List</h1>
+        <div>
+            <a href="./product-list.html"><button type="button">Products List</button></a>
+        </div>
+    </div>
+    <form action="/api/products" method="post" enctype="multipart/form-data">
+        <div>
+            <label for="image">Image <span class="required">*</span> </label> <input type="file" accept="image/png, image/jpeg, image/webp" name="image" id="image" placeholder="add image" required>
+        </div>
+        <div>
+            <label for="isNewArrival">IsNewArrival? <span class="required">*</span> </label> <input type="text" name="isNewArrival" id="isNewArrival" placeholder="yes or no" required>
+        </div>
+        <div>
+            <label for="productType">Type <span class="required">*</span> </label> <input type="text" name="productType" id="productType" placeholder="e.g., Sweaters, Hoodies..." required>
+        </div>
+        <div>
+            <label for="productCode">Code <span class="required">*</span> </label> <input type="text" name="productCode" id="productCode" placeholder="e.g., WWXS001, WWXH001..." required>
+        </div>
+        <div>
+            <label for="name">Name <span class="required">*</span> </label> <input type="text" name="name" id="name" placeholder="e.g., Washed Cable Knit Sweater..." required>
+        </div>
+        <div>
+            <label for="description">Description <span class="required">*</span> </label> <textarea name="description" id="description" cols="30" rows="10" placeholder="Enter product description..." required></textarea>
+        </div>
+        <div>
+            <label for="size">Size (To add many use comma) <span class="required">*</span> </label> <input type="text" name="size" id="size" placeholder="e.g, XS, S, M, L, XL..." required>
+        </div>
+        <div>
+            <label for="color">Color (To add many use comma)<span class="required">*</span></label> <input type="text" name="color" id="color" placeholder="e.g., red, blue..." required>
+        </div>
+        <div>
+            <label for="quantity">Quantity <span class="required">*</span></label> <input type="Number" name="quantity" id="quantity" min="0" placeholder="e.g., 1-100..." required>
+        </div>
+        <div>
+            <label for="price">Price <span class="required">*</span></label> <input type="Number" name="price" id="price" min="0" placeholder="e.g., 1000-5000..." required>
+        </div>
+        <input type="submit">
+    </form>
+</body>
+</html>
