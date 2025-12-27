@@ -65,7 +65,7 @@
      <div class="product-modal-overlay">
         <div class="product-modal" data-product-id="xyz">
             <div class="modal-left">
-                <img src="../uploads/product-images/1766759921475-fa2857d8fa69-.webp" alt="">
+                <img src="../../tmp/uploads/product-images/1766831766143-976d55eda696.webp" alt="">
             </div>
             <div class="modal-right">
 
@@ -319,7 +319,7 @@
             if(product) {
                 console.log("Product found:", product);
                 // Populate modal with product details
-                document.querySelector(".product-modal").setAttribute("data-product-id", product.id);
+                document.querySelector(".product-modal").setAttribute("data-product-id", product._id);
                 document.querySelector(".product-modal .modal-left img").src = product.image.url;
                 document.querySelector(".product-modal .modal-right .mpi .mpn").textContent = product.name;
                 document.querySelector(".product-modal .modal-right .mpi .mpp").innerHTML = `<strong>PKR ${product.price}</strong>`;

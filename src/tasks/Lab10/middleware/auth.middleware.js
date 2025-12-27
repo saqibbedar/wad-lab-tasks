@@ -2,20 +2,25 @@ import Session from "../models/session.model.js";
 import { configDotenv } from "dotenv";
 configDotenv();
 
-const isLocalDev = process.env.isLocalDev || false;
+const isLocalDev = Boolean(process.env.VERCEL_ENV === "production") || Boolean(process.env.VERCEL === "1");
 
 export default async function authMiddleware(req, res, next) {
   const token = req.cookies["auth-token"];
+  const session = await Session.findOne({token}).populate({path: "user", select: "username _id"});
   if (!token) {
+    // if no token found, logout user and remove existing session to clean database 
+    res.clearCookie("auth-token");
+    if(session) {
+      await session.deleteOne();
+    }
     return res.redirect(isLocalDev ? "/public/project/pages/Login.html" : "project/pages/Login.html");
   }
-  const session = await Session.findOne({token}).populate({path: "user", select: "username _id"});
   if(!session || session.expiresAt < new Date()) {
     return res.redirect(isLocalDev ? "/public/project/pages/Login.html" : "project/pages/Login.html");
   }
   // payload for next
   /**
-   * adding isAdmin attribute to avoid extra admin middleware and 
+   * adding isAdmin attribute to avoid extra DB query in adminMiddleware
    */
   req.user = session.user;
   req.isAdmin = Boolean(session.user.username === "admin")

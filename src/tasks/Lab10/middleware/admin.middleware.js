@@ -4,11 +4,9 @@
 const adminMiddleware = () => {
   return (req, res, next) => {
     if (!req.isAdmin) {
-      res.status(403).json({ error: "Forbidden: admin only" });
+      return res.status(403).json({ error: "Forbidden: admin only" });
     }
-    req.user;
-    req.isAdmin;
-    next();
+    return next();
   };
 };
 

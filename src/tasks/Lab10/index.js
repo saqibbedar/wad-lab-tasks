@@ -39,49 +39,22 @@ const connectDB = async () => {
   }
 };
 
-// instance
+// app setup
 const app = express();
-const isLocalDev = Boolean(process.env.isLocalDev) || false;
+
+// determine environment
+const isLocalDev = Boolean(process.env.VERCEL_ENV === "production") || Boolean(process.env.VERCEL === "1");
 
 // middlewares
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// debugger
-// app.use((req, res, next) => {
-//   console.log("REQ:", req.method, req.url);
-//   next();
-// });
+app.use("/tmp", express.static(path.join(process.cwd(), "/tmp"))); // to serve temp uploaded files in vercel
 
 // Home directory
 app.get("/", (req, res) => {
-  // let homeHTML = `
-  //       <h1>Server is working</h1>
-  //       <ul>
-  //           <li>Visit baseURL/api/products for product list</li>
-  //           <li>Visit baseURL/views/add-product.html to add new products</li>
-  //           <li>Visit baseURL/api/products/:code to get product via code <strong>OR</strong></li>
-  //           <li>Visit baseURL/api/products/search?q=YOUR_QUERY to search any product based on name, or description</li>
-  //       </ul>
-  //       <h1>Wad Project Access</h1>
-  //       <ul>
-  //         <li>Visit baseURL/project/homepage.html for project access</li>
-  //       </ul>
-  //       <h3> Debugging </h3>
-  //       <ul>
-  //           <li>MongoURI: ${
-  //             process.env.MONGODB_URI
-  //               ? "MONGO_URI is working"
-  //               : "Error in setting up MONGO_URI"
-  //           }</li>
-  //       </ul>
-  //   `;
-
-  // return res.type("html").send(homeHTML);
   res.redirect(isLocalDev ? "/public/project/homepage.html" : "/project/homepage.html");
-
 });
 
 // ***************************** Admin Routes *****************************
@@ -89,22 +62,11 @@ app.get("/", (req, res) => {
 // get all products 
 app.get("/api/products", async (req, res) => {
   try {
-    // await connectDB(); // serverless
     const products = await Product.find({}).populate({path: "image", select: "-__v -createdAt -updatedAt -uploadedBy -storage -size -mimeType -_id"})
       .select("-__v -createdAt -updatedAt")
       .lean();
     if (products) {
-      const productPayload = products.map((product) => {
-        if (product.image && product.image.filename) {
-          // console.log("product image found:", product.image.filename);
-          // console.log("isLocalDev:", isLocalDev);
-          // console.log("product image url before:", product.image.url);
-          product.image.url = isLocalDev ? `/public${product.image.url}` : `${product.image.url}`;
-          // console.log("product image url after:", product.image.url);
-        }
-        return product;
-      });
-      return res.status(200).json([...productPayload]);
+      return res.status(200).json([...products]);
     } else {
       return res
         .status(400)
@@ -163,7 +125,7 @@ app.post("/api/products", multerImageUploadErrorHandler(uploadImage.single("imag
 
       let imageFile = {
         filename: req.file.filename || "",
-        url: `/uploads/product-images/${req.file.filename}` || "",
+        url: `/tmp/uploads/product-images/${req.file.filename}` || "",
         mimeType: req.file.mimetype || "",
         size: req.file.size || 0,
         storage: "local",
@@ -238,7 +200,7 @@ app.put("/api/products/:productId", multerImageUploadErrorHandler(uploadImage.si
           const existingImageFile = await File.findById(existingProduct.image).lean();
           if (existingImageFile) {
             // delete physical file
-            const imagePath = path.join(process.cwd(), existingImageFile.storage === "local" ? `/public/uploads/product-images/${existingImageFile.filename}` : existingImageFile.filename);
+            const imagePath = `/tmp/uploads/product-images/${existingImageFile.filename}` || existingImageFile.filename;
             fs.unlink(imagePath, (err) => {
               if (err) {
                 console.error("Error deleting existing image file:", err);
@@ -252,7 +214,7 @@ app.put("/api/products/:productId", multerImageUploadErrorHandler(uploadImage.si
         // create new file record
         let newImageFile = {
           filename: req.file.filename || "",
-          url: `/uploads/product-images/${req.file.filename}` || "",
+          url: `/tmp/uploads/product-images/${req.file.filename}` || "",
           mimeType: req.file.mimetype || "",
           size: req.file.size || 0,
           storage: "local",
@@ -286,7 +248,7 @@ app.delete("/api/products/:id", authMiddleware, adminMiddleware(), async (req, r
         const imageFile = await File.findById(deletedProduct.image);
         if (imageFile) {
           // delete physical file
-          const imagePath = path.join(process.cwd(), imageFile.storage === "local" ? `/public/uploads/product-images/${imageFile.filename}` : imageFile.filename);
+          const imagePath = `/tmp/uploads/product-images/${imageFile.filename}` || imageFile.filename;
           fs.unlink(imagePath, (err) => {
             if (err) {
               console.error("Error deleting associated image file:", err);
@@ -306,30 +268,6 @@ app.delete("/api/products/:id", authMiddleware, adminMiddleware(), async (req, r
   }
 });
 
-// TX01: testing
-// app.post("/api/test-image", multerImageUploadErrorHandler(uploadImage.single("image")), async (req, res) => { 
-//   try {
-//     console.log("file:", req.file);
-//     // sleep for 10 seconds;
-//     const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-//     await sleep(1000 * 5); // wait for 10 seconds to ensure file is written
-//     if (req.file && req.file.path) {
-//       console.log("Uploaded file path:", req.file.path);
-//       // clean up uploaded image after test
-//       fs.unlink(req.file.path, (err) => {
-//         if (err) {
-//           console.error("Error deleting uploaded file:", err);
-//         }
-//       });
-//     }
-//     res.json({ message: "Image uploaded and deleted successfully" });
-//   } catch (error) {
-//     console.error("Error in image upload test route:", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
-// other routes
 
 // search a product with type, name or description /api/search?q=<query>
 app.get("/api/products/search", async (req, res) => {
@@ -362,13 +300,7 @@ app.get("/api/products/search", async (req, res) => {
       // console.log(filteredProducts)
 
       if (filteredProducts.length > 0) {
-        const productPayload = filteredProducts.map((product) => {
-          if (product.image && product.image.filename) {
-            product.image.url = isLocalDev ? `/public${product.image.url}` : `${product.image.url}`;
-          }
-          return product;
-        });
-        return res.status(200).json({ searchResults: productPayload });
+        return res.status(200).json({ searchResults: filteredProducts });
       } else {  
         res
           .status(200)
@@ -386,43 +318,6 @@ app.get("/api/products/search", async (req, res) => {
   }
 });
 
-// FX01: feature (enhanced one)
-// app.get("/api/products/search", async (req, res) => {
-//   try {
-//     const {q, skip=0, limit=4} = req.query;
-//     if(!q) {
-//       res.status(400).json({error: "Invalid or empty query"});
-//     }
-//     const sq = q.toLocaleLowerCase(); // search query
-    
-//     const query = {
-//       $or: [
-//         { productType: { $regex: sq, $options: "i" } },
-//         { name: { $regex: sq, $options: "i" } },
-//         { description: { $regex: sq, $options: "i" } },
-//       ],
-//     };
-
-//     const products = await Product.find(query)
-//       .select("-__v -createdAt -updatedAt")
-//       .skip(Number(skip))
-//       .limit(Number(limit))
-//       .lean();
-
-//     const totalCount = await Product.countDocuments(query);
-
-//     res.status(200).json({
-//       searchResults: products,
-//       total: totalCount,
-//       hasMore: skip + products.length < totalCount,
-//     });
-
-//   } catch (error) {
-//     console.error("Search error", error);
-//     res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
-
 // new arrival
 app.get("/api/products/:q", async (req, res) => {
   try {
@@ -434,14 +329,7 @@ app.get("/api/products/:q", async (req, res) => {
       .lean();
       // console.log("products:", products);
     if (products) {
-      const productPayload = products.map((product) => {
-        if (product.image && product.image.filename) {
-          product.image.url = isLocalDev ? `/public${product.image.url}` : `${product.image.url}`;
-        }
-        return product;
-      });
-      // console.log("productPayload:", productPayload);
-      return res.status(200).json({ products: productPayload });
+      return res.status(200).json({ products: [...products] });
     } else {
       return res
         .status(400)
@@ -452,29 +340,6 @@ app.get("/api/products/:q", async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
-
-// app.get("/api/products/:code", authMiddleware, adminMiddleware(), async (req, res) => {
-//   try {
-//     const productCode = req.params.code.toUpperCase();
-//     const products = await Product.findOne({ productCode }).select(
-//       "-__v -createdAt -updatedAt"
-//     );
-//     if (products) {
-//       res.status(200).json({ productsByCode: products });
-//     } else {
-//       res
-//         .status(404)
-//         .json({
-//           message: `The product you requested with product code ${productCode} can't be found, please try a different correct code.`,
-//         });
-//       // res.status(404).json({error: "Requested product not found"});
-//     }
-//   } catch (error) {
-//     console.error("Error while fetching products via codes", error);
-//     return res.status(500).json({ error: "Internal Server Error" });
-//   }
-// });
 
 // cookie based login for 1 day
 
@@ -504,7 +369,7 @@ app.post("/api/login", async (req, res) => {
     await Session.deleteMany({ user: user._id });
 
     const token = crypto.randomBytes(32).toString("hex");
-    const tokenExpiryTime = 1000 * 60 * 60 * 24; // 24hrs = 1day
+    const tokenExpiryTime = 1000 * 60 * 60 * 24; // 1 day
 
     await Session.create({
       token,
@@ -593,10 +458,10 @@ app.post("/api/products/bulk-ids", async (req, res) => {
 });
 
 
-app.get("/api/test", authMiddleware, adminMiddleware(), async (req, res) => {
-  // auth middleware is returning user which contains username and _id, in req.user and it also sends req.isAdmin flag to tell if user is admin or not, isAdmin saves a query because we are already looking up for user and admin is user too. In authMiddleware, it just confirms if username is admin, if yes then he is allowed to perform admin level operations
-  return res.send(`userId=${req.user._id}, fullUser: ${req.user}, isAdmin: ${req.isAdmin}`);
-});
+// app.get("/api/test", authMiddleware, adminMiddleware(), async (req, res) => {
+//   // auth middleware is returning user which contains username and _id, in req.user and it also sends req.isAdmin flag to tell if user is admin or not, isAdmin saves a query because we are already looking up for user and admin is user too. In authMiddleware, it just confirms if username is admin, if yes then he is allowed to perform admin level operations
+//   return res.send(`userId=${req.user._id}, fullUser: ${req.user}, isAdmin: ${req.isAdmin}`);
+// });
 
 // only for local development; vercel uses public is default root dir for exposing static contents
 // get static files using baseURL/views/add-products.html
