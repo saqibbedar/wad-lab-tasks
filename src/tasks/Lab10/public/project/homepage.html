@@ -63,7 +63,7 @@
 
     <!-- Product Modal -->
      <div class="product-modal-overlay">
-        <div class="product-modal" data-product-id="xyz">
+        <form action="/api/cart" method="post" class="product-modal" data-product-id="xyz">
             <div class="modal-left">
                 <img src="../../tmp/uploads/product-images/1766831766143-976d55eda696.webp" alt="">
             </div>
@@ -108,9 +108,9 @@
                      </div>
                 </div>
                 <!-- add to cart button -->
-                <button type="button" class="atcb">Add to Cart</button>
+                <button type="submit" class="atcb">Add to Cart</button>
             </div>
-        </div>
+        </form>
      </div>
 
     <div class="main-container">
@@ -213,9 +213,9 @@
 
                 // 2.6 render products in hero images container
                 let collector = "";
-                data.forEach(product => {
+                data.toSorted((a, b)=> b.isNewArrival - a.isNewArrival).forEach(product => {
                     collector += `
-                        <div class="img-item" title="Open ${product.name}" onclick="openProductModal('${product._id}')">
+                        <div class="img-item" title="View ${product.name} details" onclick="openProductModal('${product._id}')">
                             <div class="ratings hide">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star-icon lucide-star"><path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z"/></svg>
                                 <span>4.9</span>
@@ -304,8 +304,10 @@
         filterProductsByProductType();
 
 
-        // 9. Open Product Modal
+        // 9. Open Product Modal Element Selector
         let productModalOverlay = document.querySelector(".product-modal-overlay");
+
+        // 10. Function to open ProductModal
         function openProductModal(productId) {
             productModalOverlay.classList.add("active");
             productModalOverlay.addEventListener("click", function(e) {
@@ -313,12 +315,13 @@
                     productModalOverlay.classList.remove("active");
                 }
             });
-            console.log("Opening product modal for ID:", productId);
-            console.log("Products Array:", productsArray);
+            // console.log("Opening product modal for ID:", productId);
+            // console.log("Products Array:", productsArray);
             let product = productsArray.find(p => p._id === productId);
             if(product) {
-                console.log("Product found:", product);
-                // Populate modal with product details
+                // console.log("Product found:", product);
+
+                // 11. Populate modal with product details
                 document.querySelector(".product-modal").setAttribute("data-product-id", product._id);
                 document.querySelector(".product-modal .modal-left img").src = product.image.url;
                 document.querySelector(".product-modal .modal-right .mpi .mpn").textContent = product.name;
@@ -327,11 +330,55 @@
                 document.querySelector(".quantity-input").setAttribute("max", product.quantity);
                 document.querySelector(".product-modal .modal-right .mpd p").textContent = product.description;
 
-                // set product in local storage for cart addition
-                // also select color and size options
-                let atcb = document.querySelector(".atcb");
+                // build color options
+                let colorOptionCollector = `<option value="" disabled selected>Select Color</option>`;
+                product.color.map(clr => 
+                    colorOptionCollector += `
+                        <option value="${clr}">${clr.toUpperCase()}</option>
+                    `
+                );
+                document.querySelector(".color-select").innerHTML = colorOptionCollector;
 
-                
+                // build size options
+                let sizeOptionCollector = `<option value="" disabled selected>Select Size</option>`;
+                product.size.map(s => 
+                    sizeOptionCollector += `
+                        <option value="${s}">${s.toUpperCase()}</option>
+                    `
+                );
+                document.querySelector(".size-select").innerHTML = sizeOptionCollector;
+
+
+                // 12. submit form with product Id and selected options
+                const productForm = document.querySelector(".product-modal");
+                productForm.addEventListener("submit", async function(event) {
+                    event.preventDefault();
+                    
+                    const formData = new FormData(productForm);
+                    formData.append("productId", productId);
+                    const payload = Object.fromEntries(formData.entries());
+                    console.log(payload);
+                    try {
+                        const res = await fetch("/api/cart", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(payload)
+                        });
+                        let data = null;
+                        if(!res.ok) {
+                            data = await res.json();
+                            throw new Error(data?.error || data?.message || "Error while adding product to the cart");
+                        }
+                        data = await res.json();
+                        console.log(data.message || "cart updated");
+                        productModalOverlay.classList.remove("active");
+                        window.location.reload();
+                    } catch (error) {
+                        console.error("Error in adding product into the cart:", error);
+                    };
+                }, {once: true});                
             } else {
                 console.error("Product not found for ID:", productId);  
             }

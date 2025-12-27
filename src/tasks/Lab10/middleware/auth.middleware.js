@@ -10,6 +10,7 @@ export default async function authMiddleware(req, res, next) {
   if (!token) {
     // if no token found, logout user and remove existing session to clean database 
     res.clearCookie("auth-token");
+    console.log(session || "No session");
     if(session) {
       await session.deleteOne();
     }

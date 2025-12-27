@@ -3,16 +3,20 @@ import express from "express";
 import mongoose from "mongoose";
 import path from "path";
 // import fs from "fs";
-import { configDotenv } from "dotenv";
+import { configDotenv, populate } from "dotenv";
 import cookieParser from "cookie-parser";
 import crypto from "crypto";
 import fs from "fs";
+
+
+
 
 // models
 import Product from "./models/product.model.js";
 import User from "./models/user.model.js";
 import Session from "./models/session.model.js";
 import File from "./models/file.model.js";
+import Cart from "./models/cart.model.js";
 
 // utils
 import { comparePassword, hashPassword } from "./utils/bcrypt.utils.js";
@@ -23,7 +27,7 @@ import { multerImageUploadErrorHandler } from "./middleware/handleLargeFileUploa
 import adminMiddleware from "./middleware/admin.middleware.js";
 
 // config
-import uploadImage from "./config/imageUpload.config.js"; 
+import uploadImage from "./config/imageUpload.config.js";
 configDotenv();
 
 // db connection
@@ -42,8 +46,7 @@ const connectDB = async () => {
 // app setup
 const app = express();
 
-// determine environment
-const isLocalDev = true;
+
 
 // middlewares
 app.use(express.json());
@@ -52,17 +55,52 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/tmp", express.static(path.join(process.cwd(), "/tmp"))); // to serve temp uploaded files in vercel
 
+// ********************* constants.Utilities *****************************
+// determine environment
+const isLocalDev = true;
+
+// 
+const IMAGE_UPLOAD_DIR = path.join(
+  process.cwd(),
+  "tmp",
+  "uploads",
+  "product-images"
+);
+const imageUrlFor = (filename) => `/tmp/uploads/product-images/${filename}`;
+const imageFsPathFor = (filename) => path.join(IMAGE_UPLOAD_DIR, filename);
+
+async function safeUnlink(filePath) {
+  if (!filePath) return;
+  try {
+    await fs.promises.access(filePath, fs.constants.F_OK);
+    await fs.promises.unlink(filePath);
+  } catch (err) {
+    // ignore missing files; log other errors
+    if (err && err.code !== "ENOENT") {
+      console.error("Error deleting file:", filePath, err);
+    }
+  }
+}
+
+// ***************************** API Routes *****************************
+
 // Home directory
 app.get("/", (req, res) => {
-  res.redirect(isLocalDev ? "/public/project/homepage.html" : "/project/homepage.html");
+  res.redirect(
+    isLocalDev ? "/public/project/homepage.html" : "/project/homepage.html"
+  );
 });
 
-// ***************************** Admin Routes *****************************
 
-// get all products 
+// get all products
 app.get("/api/products", async (req, res) => {
   try {
-    const products = await Product.find({}).populate({path: "image", select: "-__v -createdAt -updatedAt -uploadedBy -storage -size -mimeType -_id"})
+    const products = await Product.find({})
+      .populate({
+        path: "image",
+        select:
+          "-__v -createdAt -updatedAt -uploadedBy -storage -size -mimeType -_id",
+      })
       .select("-__v -createdAt -updatedAt")
       .lean();
     if (products) {
@@ -78,196 +116,220 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
+
+// ***************************** Admin Routes *****************************
+
 // create a product - admin only
-app.post("/api/products", multerImageUploadErrorHandler(uploadImage.single("image")), authMiddleware, adminMiddleware(), async (req, res) => {
-  try {
-    const rawBody = req.body || {};
-    console.log("user", req.user, "isAdmin", req.isAdmin, "id:", req.user._id);
-    if (rawBody) {
-      const {
-        productType,
-        productCode,
-        name,
-        description,
-        size,
-        color,
-        quantity,
-        price,
-        isNewArrival
-      } = rawBody;
-
-      if(!req.file || !req.file.path) {
-        return res.json({"error": "Product Image is required"});
-      }
-
-      // validation
-      const isCodeExist = await Product.findOne({
-        productType,
-        productCode,
-      }).lean();
-      if (isCodeExist) {
-        // clean up uploaded image if product code already exists
-        if (req.file && req.file.path) {
-          fs.unlink(req.file.path, (err) => {
-            if (err) {
-              console.error("Error deleting uploaded file:", err);
-            }
-          });
-        }
-        return res.status(409).json({ error: "Product code already exists" });
-      }
-
-      const sizeArray = size.split(",").map((str) => str.trim());
-      const colorArray = color.split(",").map((str) => str.trim());
-
-      //   console.log(sizeArray);
-      //   console.log(colorArray);
-
-      let imageFile = {
-        filename: req.file.filename || "",
-        url: `/tmp/uploads/product-images/${req.file.filename}` || "",
-        mimeType: req.file.mimetype || "",
-        size: req.file.size || 0,
-        storage: "local",
-        uploadedBy: req.user._id ? req.user._id : null
-      }
-
-      imageFile = await File.create(imageFile);
-
-      const productPayload = {
-        image: imageFile._id,
-        productType,
-        productCode,
-        name,
-        description,
-        size: sizeArray,
-        color: colorArray,
-        quantity,
-        price,
-        isNewArrival: isNewArrival.toLowerCase() === "yes" ? true : false
-      };
-
-      const newProduct = new Product({ ...productPayload });
-
-      await newProduct.save();
-
-      return res.redirect("/admin/product-list.html");
-    }
-  } catch (error) {
-    console.error("Error while creating product", error);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
-// update a product - admin only
-app.put("/api/products/:productId", multerImageUploadErrorHandler(uploadImage.single("image")), authMiddleware, adminMiddleware(), async (req, res) => { 
-  try {
-    const productId = req.params.productId || "";
-    const rawBody = req.body || {};
-    // get existing product
-    if (rawBody) {
-      const { 
-        productType,
-        productCode,
-        name,
-        description,
-        size,
-        color,
-        quantity,
-        price,
-        isNewArrival
+app.post(
+  "/api/products",
+  multerImageUploadErrorHandler(uploadImage.single("image")),
+  authMiddleware,
+  adminMiddleware(),
+  async (req, res) => {
+    try {
+      const rawBody = req.body || {};
+      console.log(
+        "user",
+        req.user,
+        "isAdmin",
+        req.isAdmin,
+        "id:",
+        req.user._id
+      );
+      if (rawBody) {
+        const {
+          productType,
+          productCode,
+          name,
+          description,
+          size,
+          color,
+          quantity,
+          price,
+          isNewArrival,
         } = rawBody;
-      // setup update payload
-      const sizeArray = size.split(",").map((str) => str.trim());
-      const colorArray = color.split(",").map((str) => str.trim());
-      const updatePayload = {
-        productType,
-        productCode,
-        name,
-        description,
-        size: sizeArray,
-        color: colorArray,
-        quantity,
-        price,
-        isNewArrival: isNewArrival.toLowerCase() === "yes" ? true : false
-      };
 
-      // check if new image is uploaded
-      if (req.file && req.file.path) {
-        // first find existing product to get image file id
-        const existingProduct = await Product.findById(productId).lean();
-        if (existingProduct && existingProduct.image) {
-          const existingImageFile = await File.findById(existingProduct.image).lean();
-          if (existingImageFile) {
-            // delete physical file
-            const imagePath = `/tmp/uploads/product-images/${existingImageFile.filename}` || existingImageFile.filename;
-            fs.unlink(imagePath, (err) => {
-              if (err) {
-                console.error("Error deleting existing image file:", err);
-              }
-            });
-            // delete file record
-            await File.findByIdAndDelete(existingProduct.image);
-          }
+        if (!req.file || !req.file.path) {
+          return res.json({ error: "Product Image is required" });
         }
 
-        // create new file record
-        let newImageFile = {
+        // validation
+        const isCodeExist = await Product.findOne({
+          productType,
+          productCode,
+        }).lean();
+        if (isCodeExist) {
+          // clean up uploaded image if product code already exists
+          if (req.file && req.file.path) {
+            await safeUnlink(req.file.path);
+          }
+          return res.status(409).json({ error: "Product code already exists" });
+        }
+
+        const sizeArray = size.split(",").map((str) => str.trim());
+        const colorArray = color.split(",").map((str) => str.trim());
+
+        //   console.log(sizeArray);
+        //   console.log(colorArray);
+
+        let imageFile = {
           filename: req.file.filename || "",
-          url: `/tmp/uploads/product-images/${req.file.filename}` || "",
+          url: imageUrlFor(req.file.filename) || "",
           mimeType: req.file.mimetype || "",
           size: req.file.size || 0,
           storage: "local",
-          uploadedBy: req.user._id ? req.user._id : null
-        }
+          uploadedBy: req.user._id ? req.user._id : null,
+        };
 
-        newImageFile = await File.create(newImageFile);
-        updatePayload.image = newImageFile._id;
+        imageFile = await File.create(imageFile);
+
+        const productPayload = {
+          image: imageFile._id,
+          productType,
+          productCode,
+          name,
+          description,
+          size: sizeArray,
+          color: colorArray,
+          quantity,
+          price,
+          isNewArrival: isNewArrival.toLowerCase() === "yes" ? true : false,
+        };
+
+        const newProduct = new Product({ ...productPayload });
+
+        await newProduct.save();
+
+        return res.redirect("/admin/product-list.html");
       }
-      const updatedProduct = await Product.findByIdAndUpdate(productId, updatePayload, { new: true });
-      if (updatedProduct) {
-        return res.status(200).json({ message: "Product updated successfully" });
+    } catch (error) {
+      console.error("Error while creating product", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+);
+
+// update a product - admin only
+app.put(
+  "/api/products/:productId",
+  multerImageUploadErrorHandler(uploadImage.single("image")),
+  authMiddleware,
+  adminMiddleware(),
+  async (req, res) => {
+    try {
+      const productId = req.params.productId || "";
+      const rawBody = req.body || {};
+      // get existing product
+      if (rawBody) {
+        const {
+          productType,
+          productCode,
+          name,
+          description,
+          size,
+          color,
+          quantity,
+          price,
+          isNewArrival,
+        } = rawBody;
+        // setup update payload
+        const sizeArray = size.split(",").map((str) => str.trim());
+        const colorArray = color.split(",").map((str) => str.trim());
+        const updatePayload = {
+          productType,
+          productCode,
+          name,
+          description,
+          size: sizeArray,
+          color: colorArray,
+          quantity,
+          price,
+          isNewArrival: isNewArrival.toLowerCase() === "yes" ? true : false,
+        };
+
+        // check if new image is uploaded
+        if (req.file && req.file.path) {
+          // first find existing product to get image file id
+          const existingProduct = await Product.findById(productId).lean();
+          if (existingProduct && existingProduct.image) {
+            const existingImageFile = await File.findById(
+              existingProduct.image
+            ).lean();
+            if (existingImageFile) {
+              // delete physical file
+              await safeUnlink(imageFsPathFor(existingImageFile.filename));
+              // delete file record
+              await File.findByIdAndDelete(existingProduct.image);
+            }
+          }
+
+          // create new file record
+          let newImageFile = {
+            filename: req.file.filename || "",
+            url: imageUrlFor(req.file.filename) || "",
+            mimeType: req.file.mimetype || "",
+            size: req.file.size || 0,
+            storage: "local",
+            uploadedBy: req.user._id ? req.user._id : null,
+          };
+
+          newImageFile = await File.create(newImageFile);
+          updatePayload.image = newImageFile._id;
+        }
+        const updatedProduct = await Product.findByIdAndUpdate(
+          productId,
+          updatePayload,
+          { new: true }
+        );
+        if (updatedProduct) {
+          return res
+            .status(200)
+            .json({ message: "Product updated successfully" });
+        } else {
+          return res.status(404).json({ error: "Product not found" });
+        }
+      }
+    } catch (error) {
+      console.error("Error while updating product", error);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+);
+
+// delete a product - admin only
+app.delete(
+  "/api/products/:id",
+  authMiddleware,
+  adminMiddleware(),
+  async (req, res) => {
+    try {
+      const productId = req.params.id;
+      const deletedProduct = await Product.findByIdAndDelete(productId);
+      if (deletedProduct) {
+        // also delete associated image file record
+        if (deletedProduct.image) {
+          const imageFile = await File.findById(deletedProduct.image);
+          if (imageFile) {
+            // delete physical file
+            await safeUnlink(imageFsPathFor(imageFile.filename));
+            // delete file record
+            await File.findByIdAndDelete(deletedProduct.image);
+          }
+        }
+        return res
+          .status(200)
+          .json({ message: "Product deleted successfully" });
       } else {
         return res.status(404).json({ error: "Product not found" });
       }
+    } catch (error) {
+      console.error("Error while deleting product", error);
+      return res.status(500).json({ error: "Internal Server Error" });
     }
-  } catch (error) {
-    console.error("Error while updating product", error);
-    return res.status(500).json({ error: "Internal Server Error" });
   }
-})
+);
 
-// delete a product - admin only
-app.delete("/api/products/:id", authMiddleware, adminMiddleware(), async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const deletedProduct = await Product.findByIdAndDelete(productId);
-    if (deletedProduct) {
-      // also delete associated image file record
-      if (deletedProduct.image) {
-        const imageFile = await File.findById(deletedProduct.image);
-        if (imageFile) {
-          // delete physical file
-          const imagePath = `/tmp/uploads/product-images/${imageFile.filename}` || imageFile.filename;
-          fs.unlink(imagePath, (err) => {
-            if (err) {
-              console.error("Error deleting associated image file:", err);
-            }
-          });
-          // delete file record
-          await File.findByIdAndDelete(deletedProduct.image);
-        }
-      }
-      return res.status(200).json({ message: "Product deleted successfully" });
-    } else {
-      return res.status(404).json({ error: "Product not found" });
-    }
-  } catch (error) {
-    console.error("Error while deleting product", error);
-    return res.status(500).json({ error: "Internal Server Error" });
-  }
-});
-
+// ********************** Public API Routes *****************************
 
 // search a product with type, name or description /api/search?q=<query>
 app.get("/api/products/search", async (req, res) => {
@@ -278,7 +340,12 @@ app.get("/api/products/search", async (req, res) => {
     // console.log(q);
 
     if (q) {
-      const products = await Product.find({}).populate({path: "image", select: "-__v -createdAt -updatedAt -uploadedBy -storage -size -mimeType -_id"})
+      const products = await Product.find({})
+        .populate({
+          path: "image",
+          select:
+            "-__v -createdAt -updatedAt -uploadedBy -storage -size -mimeType -_id",
+        })
         .select("-__v -createdAt -updatedAt")
         .lean();
       // console.log(products)
@@ -301,13 +368,11 @@ app.get("/api/products/search", async (req, res) => {
 
       if (filteredProducts.length > 0) {
         return res.status(200).json({ searchResults: filteredProducts });
-      } else {  
-        res
-          .status(200)
-          .json({
-            message: `No product found for search query ${q}`,
-            searchResults: `No product found for search query ${q}`,
-          });
+      } else {
+        res.status(200).json({
+          message: `No product found for search query ${q}`,
+          searchResults: `No product found for search query ${q}`,
+        });
       }
     } else {
       res.status(400).json({ error: "Invalid or empty query" });
@@ -324,10 +389,15 @@ app.get("/api/products/:q", async (req, res) => {
     const q = req.params.q;
     let isNewArrival = q === "true" ? true : false;
     // console.log("api/products/:q ",isNewArrival)
-    const products = await Product.find({isNewArrival}).populate({path: "image", select: "-__v -createdAt -updatedAt -uploadedBy -storage -size -mimeType -_id"})
+    const products = await Product.find({ isNewArrival })
+      .populate({
+        path: "image",
+        select:
+          "-__v -createdAt -updatedAt -uploadedBy -storage -size -mimeType -_id",
+      })
       .select("-__v -createdAt -updatedAt")
       .lean();
-      // console.log("products:", products);
+    // console.log("products:", products);
     if (products) {
       return res.status(200).json({ products: [...products] });
     } else {
@@ -341,8 +411,9 @@ app.get("/api/products/:q", async (req, res) => {
   }
 });
 
-// cookie based login for 1 day
+// ********************** User Auth Routes *****************************
 
+// cookie based login for 1 day
 app.post("/api/login", async (req, res) => {
   try {
     const { username, password } = req.body || {};
@@ -374,14 +445,14 @@ app.post("/api/login", async (req, res) => {
     await Session.create({
       token,
       user: user._id,
-      expiresAt: new Date(Date.now() + tokenExpiryTime)
+      expiresAt: new Date(Date.now() + tokenExpiryTime),
     });
 
     res.cookie("auth-token", token, {
       httpOnly: true,
       secure: false,
       sameSite: "lax",
-      maxAge: tokenExpiryTime
+      maxAge: tokenExpiryTime,
     });
 
     res.status(200).json({
@@ -389,7 +460,7 @@ app.post("/api/login", async (req, res) => {
       user: {
         _id: user._id,
         username: user.username,
-        isLoggedIn: true
+        isLoggedIn: true,
       },
     });
   } catch (error) {
@@ -399,12 +470,14 @@ app.post("/api/login", async (req, res) => {
 });
 
 app.post("/api/logout", async (req, res) => {
-    const token = req.cookies["auth-token"];
-    if (token) {
-      await Session.deleteOne({token});
-    }
-    res.clearCookie("auth-token");
-    res.redirect(isLocalDev ? "/public/project/homepage.html" : "/project/homepage.html");
+  const token = req.cookies["auth-token"];
+  if (token) {
+    await Session.deleteOne({ token });
+  }
+  res.clearCookie("auth-token");
+  res.redirect(
+    isLocalDev ? "/public/project/homepage.html" : "/project/homepage.html"
+  );
 });
 
 app.post("/api/signup", async (req, res) => {
@@ -422,12 +495,10 @@ app.post("/api/signup", async (req, res) => {
       username.length < 5 ||
       username.length > 15
     ) {
-      return res
-        .status(400)
-        .json({
-          error:
-            "Incorrect username or password length, minimum length allowed is 5 and max 15",
-        });
+      return res.status(400).json({
+        error:
+          "Incorrect username or password length, minimum length allowed is 5 and max 15",
+      });
     }
     const isAlreadyExist = await User.findOne({ username });
     if (isAlreadyExist) {
@@ -439,23 +510,150 @@ app.post("/api/signup", async (req, res) => {
     let newUser = new User({ username, password });
     console.log(newUser);
     await newUser.save();
-    return res.redirect("/public/project/pages/Login.html");
+    return res.status(201).json({
+      message: "Signup successful",
+      user: {
+        _id: newUser._id,
+        username: newUser.username,
+      },
+    }); 
   } catch (error) {
     console.error("Error while creating user", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
-// bulk request
-app.post("/api/products/bulk-ids", async (req, res) => {
-  const { productIds } = req.body;
+// *********************** Cart Routes *****************************
+app.get("/api/cart", authMiddleware, async (req, res) => {
+  try {
+    const userCart = await Cart.findOne({ userId: req.user._id }).populate({
+      path: "products.productId",
+      select: "name price image isNewArrival productType",
+      populate: {
+        path: "image",
+        select: "url"
+      },
+    }).select("-__v -updatedAt -createdAt");
+    if(userCart) {
+      // console.log(userCart);
+      return res.status(200).json({cart: userCart, message: "Cart fetched successfully"});
+    } else {
+      return res.status(400).json({error: "Cart is empty"});
+    }
+  } catch (error) {
+    console.error("Error while fetching user cart", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+})
 
-  const products = await Product.find({
-    _id: { $in: productIds },
-  }).lean();
+app.post("/api/cart", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    let { productId, quantity, color, size } = req.body;
 
-  res.json(products);
+    quantity = Number(quantity);
+
+    if (!productId || !color || !size || !quantity || quantity <= 0) {
+      return res.status(400).json({ error: "Enter all required fields" });
+    }
+
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      cart = await Cart.create({
+        userId,
+        products: [],
+        deliveryCharges: 0,
+        totalAmount: 0,
+      });
+    }
+
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+
+    if (product.quantity < quantity) {
+      return res.status(400).json({ error: "Not in stock" });
+    }
+
+    const productItem = cart.products.find(
+      (p) =>
+        p.productId.toString() === productId &&
+        p.color === color &&
+        p.size === size
+    );
+
+    if (productItem) {
+      productItem.quantity += quantity;
+    } else {
+      cart.products.push({ productId, quantity, color, size });
+    }
+
+    // update totals
+    cart.totalAmount += product.price * quantity;
+    cart.deliveryCharges = Number(cart.totalAmount) >= 5000 ? 0 : 250;
+
+    // decrement product 
+    product.quantity -= quantity;
+
+    await product.save();
+    await cart.save();
+
+    return res.status(200).json({ message: "Updated cart successfully" });
+  } catch (error) {
+    console.error("Error while updating user cart", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
 });
+
+app.delete("/api/cart", authMiddleware, async (req, res) => {
+  try {
+    const { cartId, productId, cartItemId } = req.query;
+
+    const cart = await Cart.findById(cartId).populate({
+      path: "products.productId",
+      select: "price",
+    });
+
+    if (!cart) {
+      return res.status(404).json({ error: "Cart not found" });
+    }
+
+    const itemToDeleteFromCart = cart.products.find(
+      (p) => String(p._id) === cartItemId
+    );
+
+    if (!itemToDeleteFromCart) {
+      return res.status(404).json({ error: "Cart item not found" });
+    }
+
+    const product = await Product.findById(productId).select("quantity");
+
+    // restore stock
+    product.quantity += itemToDeleteFromCart.quantity;
+
+    // remove item
+    cart.products = cart.products.filter((p) => String(p._id) !== cartItemId);
+
+    // calculate total
+    cart.totalAmount = cart.products.reduce((sum, p) => {
+      return sum + p.productId.price * p.quantity;
+    }, 0);
+
+    cart.deliveryCharges = cart.totalAmount >= 5000 ? 0 : 250;
+
+    await product.save();
+    await cart.save();
+
+    return res.status(200).json({ message: "Product removed from cart" });
+  } catch (error) {
+    console.error("Error while updating user cart", error);
+    return res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 
 // app.get("/api/test", authMiddleware, adminMiddleware(), async (req, res) => {
@@ -468,7 +666,12 @@ app.post("/api/products/bulk-ids", async (req, res) => {
 // serving static files after api to avoid express not found error
 
 // views are now added into admin for product crud operations.
-app.use("/admin", authMiddleware, adminMiddleware(), express.static(path.join(process.cwd(), "/admin"))); 
+app.use(
+  "/admin",
+  authMiddleware,
+  adminMiddleware(),
+  express.static(path.join(process.cwd(), "/admin"))
+);
 // for local development only
 app.use("/public", express.static(path.join(process.cwd(), "/public")));
 

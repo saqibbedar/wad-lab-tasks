@@ -63,6 +63,58 @@
             </ul>
         </nav>
 
+         <!-- Product Modal -->
+        <div class="product-modal-overlay">
+            <form action="/api/cart" method="post" class="product-modal" data-product-id="xyz">
+                <div class="modal-left">
+                    <img src="../../tmp/uploads/product-images/1766831766143-976d55eda696.webp" alt="">
+                </div>
+                <div class="modal-right">
+
+                    <!-- modal Product Info  -->
+                    <div class="mpi">
+                        <!-- modal-product-name -->
+                        <h2 class="mpn">Name</h2>
+                        <!-- modal-product-price -->
+                        <div class="mpp"><strong>PKR 1,000</strong></div>
+                    </div>
+                    <!-- modal-product-description -->
+                    <div class="mpd"><strong>Description</strong><p>...</p></div>
+
+                    <!-- product options -->
+                    <div class="po">
+                        <!-- select color -->
+                        <select name="color" id="color" class="color-select" required>
+                            <option value="" disabled selected>Select Color</option>
+                            <option value="Red">Red</option>
+                            <option value="Blue">Blue</option>
+                            <option value="Green">Green</option>
+                            <option value="Black">Black</option>
+                            <option value="White">White</option>
+                        </select>
+                        <!-- select size -->
+                        <select name="size" id="size" class="size-select" required>
+                            <option value="" disabled selected>Select Size</option>
+                            <option value="S">Small (S)</option>
+                            <option value="M">Medium (M)</option>
+                            <option value="L">Large (L)</option>
+                            <option value="XL">Extra Large (XL)</option>
+                        </select>
+                        <!-- Modal Quantity Container -->
+                        <div class="mqc">
+                            <p>InStock: <span class="instock-quantity">0</span></p>
+                            <div>
+                                <label for="quantity">Enter Quantity:</label>
+                                <input type="number" name="quantity" id="quantity" class="quantity-input" min="1" value="1" required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- add to cart button -->
+                    <button type="submit" class="atcb">Add to Cart</button>
+                </div>
+            </form>
+        </div>
+
         <div class="search-overlay">
             <div class="search-bar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
@@ -117,7 +169,7 @@
         </footer>
     </div>
     <script>
-
+        let productsArray = [];
         let displayResults = document.querySelector(".display-results"); // main container to display results 
 
         // search product function
@@ -139,6 +191,7 @@
                 }
 
                 // console.log(data.searchResults);
+                productsArray = data.searchResults;
 
                 document.querySelector(".search-text").innerHTML = `RESULTS FOR: <strong>${q}</strong>`;
                 let collector = "";
@@ -147,7 +200,7 @@
                 // build html for each product
                 data.searchResults.map(r => 
                     collector += `
-                    <div class="item" data-product-id="${r._id}">
+                    <div style="cursor:pointer;" class="item" data-product-id="${r._id}" title="View ${r.name} details" onclick="openProductModal('${r._id}')">
                         <img data-src="${r.image?.url}" src="" alt="${r.name}" />
                         ${ r.isNewArrival ? "<h4 style='color: red;'>New Arrival</h4>" :    "" }
                         <h4>${r.name}</h4>
@@ -174,10 +227,7 @@
             } catch (error) {
                 console.error("Error while searching products", error);
                 alert("Sorry, products were not found due to server error, we are fixing the issue, please try again later.");
-            } finally {
-                // add to cart logic
-                setupAddToCartButtons();
-            }
+            } 
         }
         
         let queryInput = "";
@@ -189,10 +239,86 @@
             }
         });
 
-        // handle cart logic
-        function setupAddToCartButtons(){
-            console.log("Setting up add to cart buttons...");
+        // 9. Open Product Modal Element Selector
+        let productModalOverlay = document.querySelector(".product-modal-overlay");
+
+        // 10. Function to open ProductModal
+        function openProductModal(productId) {
+            productModalOverlay.classList.add("active");
+            productModalOverlay.addEventListener("click", function(e) {
+                if(e.target === productModalOverlay) {
+                    productModalOverlay.classList.remove("active");
+                }
+            });
+            // console.log("Opening product modal for ID:", productId);
+            // console.log("Products Array:", productsArray);
+            let product = productsArray.find(p => p._id === productId);
+            if(product) {
+                // console.log("Product found:", product);
+
+                // 11. Populate modal with product details
+                document.querySelector(".product-modal").setAttribute("data-product-id", product._id);
+                document.querySelector(".product-modal .modal-left img").src = product.image.url;
+                document.querySelector(".product-modal .modal-right .mpi .mpn").textContent = product.name;
+                document.querySelector(".product-modal .modal-right .mpi .mpp").innerHTML = `<strong>PKR ${product.price}</strong>`;
+                document.querySelector(".product-modal .modal-right .mqc .instock-quantity").textContent = product.quantity;
+                document.querySelector(".quantity-input").setAttribute("max", product.quantity);
+                document.querySelector(".product-modal .modal-right .mpd p").textContent = product.description;
+
+                // build color options
+                let colorOptionCollector = `<option value="" disabled selected>Select Color</option>`;
+                product.color.map(clr => 
+                    colorOptionCollector += `
+                        <option value="${clr}">${clr.toUpperCase()}</option>
+                    `
+                );
+                document.querySelector(".color-select").innerHTML = colorOptionCollector;
+
+                // build size options
+                let sizeOptionCollector = `<option value="" disabled selected>Select Size</option>`;
+                product.size.map(s => 
+                    sizeOptionCollector += `
+                        <option value="${s}">${s.toUpperCase()}</option>
+                    `
+                );
+                document.querySelector(".size-select").innerHTML = sizeOptionCollector;
+
+
+                // 12. submit form with product Id and selected options
+                const productForm = document.querySelector(".product-modal");
+                productForm.addEventListener("submit", async function(event) {
+                    event.preventDefault();
+                    
+                    const formData = new FormData(productForm);
+                    formData.append("productId", productId);
+                    const payload = Object.fromEntries(formData.entries());
+                    console.log(payload);
+                    try {
+                        const res = await fetch("/api/cart", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(payload)
+                        });
+                        let data = null;
+                        if(!res.ok) {
+                            data = await res.json();
+                            throw new Error(data?.error || data?.message || "Error while adding product to the cart");
+                        }
+                        data = await res.json();
+                        console.log(data.message || "cart updated");
+                        productModalOverlay.classList.remove("active");
+                        window.location.reload();
+                    } catch (error) {
+                        console.error("Error in adding product into the cart:", error);
+                    };
+                }, {once: true});                
+            } else {
+                console.error("Product not found for ID:", productId);  
+            }
         }
+        
 
     </script>
     <script src="../global.js"></script>

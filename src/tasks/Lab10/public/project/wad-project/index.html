@@ -35,15 +35,19 @@
         </ul>
      </div>
 
+     <div class="shop-menu-mobile-version">
+        <div class="shop-menu" title="menu">SHOP</div>
+     </div>
+
     <!-- navbar -->
     <nav>
         <ul>
-            <li class="shop-menu">SHOP</li>
+            <li class="shop-menu hide-on-mobile-screen">SHOP</li>
             <li><a href="../homepage.html">LOGO</a></li>
             <li>
                 <a href="../ali/ali.html"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></a>
 
-                <a href="../pages/Login.html" title="Login" class="hide-on-mobile-screen" id="user-profile">
+                <a href="../pages/Login.html" title="Login" id="user-profile">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round-icon lucide-user-round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></svg>
                     <div class="loggedInUserInfo">
                         <div><strong>Account Id: </strong> <p class="account-id"></p></div>
@@ -53,7 +57,9 @@
                     </div>
                 </a>
 
-                <a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag-icon lucide-shopping-bag"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg></a>
+                <a href="#" class="cart-icon-area"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shopping-bag-icon lucide-shopping-bag"><path d="M16 10a4 4 0 0 1-8 0"/><path d="M3.103 6.034h17.794"/><path d="M3.4 5.467a2 2 0 0 0-.4 1.2V20a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6.667a2 2 0 0 0-.4-1.2l-2-2.667A2 2 0 0 0 17 2H7a2 2 0 0 0-1.6.8z"/></svg>
+                <!-- <span class="cart-size">0</span> -->
+                </a>
             </li>
         </ul>
     </nav>
@@ -62,24 +68,39 @@
         <div class="page-container">
             <h1 class="page-title">Your Product Cart</h1>
 
-            <section class="product-grid" aria-label="Product details">
-               <table>
+            <div class="table-container">
+                <table>
                     <tr>
                         <th>S.No.</th>
-                        <th>Type</th>
+                        <th>Image</th>
                         <th>Name</th>
+                        <th>NewArrival</th>
                         <th>Size</th>
-                        <th>Color</th>
+                        <th>Color</th>  
+                        <th>Quantity</th>  
                         <th>Price</th>
+                        <th>Action</th>
                     </tr>
-                    <tr>
+                    <tr class="loading-row">
+                        <td colspan="9" style="text-align: center;">Loading products...</td>
                     </tr>
-               </table>
-                
-            </section>
+                </table>
+            </div>
 
-            <div>
-                <!-- <h3>Total Amount</h3> -->
+            <br>
+            <br>
+            <div class="cart-explore-products-buttons">
+                <a href="../homepage.html"><button type="button">Browse More</button></a>
+                <a href="../pages/NewArrival.html"><button type="button">New Arrivals</button></a>
+                <a href="../ali/ali.html"><button type="button">Search</button></a>
+            </div>
+
+            <br>
+            <br>
+            <div class="cart-total">
+                <h3 class="deliveryCharges">Delivery Charges: <span>0</span></h3><br>
+                <h3 class="subtotal">SubTotal: <span>0</span></h3><br>
+                <h3 class="totalAmount">Total Amount: <span>0</span></h3>
             </div>
         </div>
     </main>
@@ -117,50 +138,116 @@
     <script src="../global.js"></script>
     <script>
         
-        async function renderCart() {
-            const cart = getCart();
-            const productIds = Object.keys(cart);
-
-            if (productIds.length === 0) {
-                document.querySelector("table").innerHTML += `
-                <tr><td colspan="6" style="text-align:center; height: 40dvh;"><strong>Cart is empty</strong></td></tr>
-                `;
-                return;
-            }
-
-            // fetch product details
-            const res = await fetch("/api/products/bulk-ids", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ productIds })
-            });
-            
-            if(!res.ok) {
-                console.log("error", res || "")
+        
+        // 1. cart data holder
+        let cart = null;
+        
+        // 2. fetch user cart
+        async function fetchUserCart() {
+            // 2.1 fetching
+            const response = await fetch("/api/cart");
+            if(!response.ok) {
+                console.error("Error while fetching user cart");
+                document.querySelector(".loading-row").style.display = "table-row";
+                document.querySelector(".loading-row td").textContent = "Cart is Empty!";
+                return
             }
             
-            const products = await res.json();
-            
-            const table = document.querySelector("table");
-            
-            products.forEach((p, i) => {
-                const qty = cart[p._id].qty;
+            // 2.2 If response was okay save data and check if data is correct
+            const data = await response.json();
+            if (data) {
+
+                // 2.3 Get cart from backend data
+                cart = data.cart;
+                // const subTotal = cart.products.reduce((sum, p) => {
+                //     return sum + (p.productId.price * p.quantity);
+                // }, 0);
                 
-                table.innerHTML += `
-                <tr>
-                    <td>${i + 1}</td>
-                    <td>${p.productType}</td>
-                    <td>${p.name}</td>
-                    <td>${p.size[0]}</td>
-                    <td>${p.color[0]}</td>
-                    <td>PKR ${p.price} × ${qty}</td>
-                    </tr>
-                    `;
-                });
+                // 2.4 Update basic cart info
+                document.querySelector(".deliveryCharges span").textContent = Boolean(Number(cart.deliveryCharges) === 0 && Number(cart.totalAmount > 0) && cart.products.length > 0) ? "🎉 Free Delivery coupon was applied to your order!" : cart.products.length > 0 ? cart.deliveryCharges : 0;
+                document.querySelector(".subtotal span").textContent = cart.totalAmount;
+                document.querySelector(".totalAmount span").textContent = Number(cart.totalAmount) + Number(cart.products.length > 0 ? cart.deliveryCharges : 0);
+                
+                // 2.5 Table Management
+                let collector = "";
+                if(cart.products.length > 0) {
+
+                    // 2.6 save cartSize ==> feature not added for now
+                    localStorage.setItem("cart-size", `${cart.products.length}`);
+
+                    // 2.7 build table body
+                    cart.products.map((p, index) => {
+    
+                        return collector += `
+                        <tr data-cart-item-id="${cart._id}">
+                            <td>${index+1}</td>
+                            <td><img src="${p.productId.image.url}"/></td>
+                            <td>${p.productId.name || "N/A"}</td>
+                            <td>${p.productId.isNewArrival? "Yes" : "No"}</td>
+                            <td>${p.size}</td>
+                            <td>${p.color}</td>  
+                            <td>${p.quantity}</td>  
+                            <td>${Number(p.productId.price)}</td>
+                            <td>
+                                <input type="button" value="Remove" onclick="removeItemFromCart('${cart._id}', '${p.productId._id}', '${p._id}')">
+                            </td>
+                        </tr>
+                        `
+                    }
+                    );
+
+                    // 2.8 Hide loading row and display body to table 
+                    document.querySelector(".loading-row").style.display = "none";
+                    document.querySelector(".table-container table").insertAdjacentHTML("beforeend", collector)
+                    console.log(cart)
+                } else {
+                    console.log("Hello")
+                    document.querySelector(".loading-row").style.display = "table-row";
+                    document.querySelector(".loading-row td").textContent = "Cart is Empty!";
+                }
+            } else {
+                document.querySelector(".loading-row").style.display = "table-row";
+                document.querySelector(".loading-row td").textContent = "Cart is Empty!";
+            }
+        }
+        
+        // 3. fetch user cart only if user is loggedIn
+        if(localStorage.getItem("user_login_info")) {
+            fetchUserCart();
+        } else {
+            // 3.1 if not loggedIn update message for Login
+            document.querySelector(".loading-row").style.display = "table-row";
+            document.querySelector(".loading-row td").textContent = "Please Login To Get Your Product Cart!";
+        }
+        
+        // 4. Remove product from cart
+        async function removeItemFromCart(cartId, productId, cartItemId) {
+            // 4.1 Item removal response
+            const res = await fetch(`/api/cart?cartId=${cartId}&productId=${productId}&cartItemId=${cartItemId}`, {
+                method: "DELETE"
+            });
+
+            // 4.2 data holder
+            let data = null;
+
+            // 4.3 if there was any issue in removing cart, console errors
+            if(!res.ok) {
+                data = await res.json();
+                console.error(data.error || "Error while removing product from cart")
             }
             
-            renderCart();
+            // 4.4 No error, get the data
+            data = await res.json();
+            
+            // 4.5 cart item removed, display data for any message from server and reload window for fresh user cart
+            if(data) {
+                console.log(data);
+                window.location.reload();
+            }
+        }
+        
     </script>
+    <script src="../app.js"></script>
     <script src="../handleTopBanner.js" defer></script>
 </body>
 </html>

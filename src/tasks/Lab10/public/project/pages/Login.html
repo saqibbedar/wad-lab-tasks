@@ -59,7 +59,8 @@
         let form = document.querySelector("form");
         let isLoading = false;
 
-        signUpLoginButtonElem.addEventListener("click", (e) => {
+        // UI Toggler
+        function handleLoginSignUp(e) {
             isSigningUp = !isSigningUp;
             if(isSigningUp) {
                 loginSingUpTitleElement.textContent = "Sign Up";
@@ -72,7 +73,9 @@
                 alreadyAccountElement.textContent = "DON'T HAVE AN ACCOUNT?";
                 signUpLoginButtonElem.textContent = "Create an account";    
             }
-        });
+        }
+        
+        signUpLoginButtonElem.addEventListener("click", handleLoginSignUp);
         
         function handleSubmitButtonLoading() {
             if(isSigningUp) {
@@ -82,7 +85,7 @@
             }
         }
 
-        const isLocalDev = false; // change it for vercel, when upload code to github
+        // const isLocalDev = true; // change it for vercel, when upload code to github
 
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -105,8 +108,12 @@
                     alert(data.error || "Unable to log you in, Please try again");
                     return;
                 }
-                localStorage.setItem("user_login_info", JSON.stringify(data.user));
-                window.location.href = "/";
+                if(data.message.includes("Signup")) {
+                    window.location.reload();
+                } else {
+                    localStorage.setItem("user_login_info", JSON.stringify(data.user));
+                    window.location.href = "/";
+                }
             } catch (error) {
                 console.error("Login failed", error);
                 alert("Server error");
