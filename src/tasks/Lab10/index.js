@@ -43,7 +43,7 @@ const connectDB = async () => {
 const app = express();
 
 // determine environment
-const isLocalDev = Boolean(process.env.VERCEL_ENV === "production") || Boolean(process.env.VERCEL === "1");
+const isLocalDev = false;
 
 // middlewares
 app.use(express.json());

@@ -2,7 +2,7 @@ import Session from "../models/session.model.js";
 import { configDotenv } from "dotenv";
 configDotenv();
 
-const isLocalDev = Boolean(process.env.VERCEL_ENV === "production") || Boolean(process.env.VERCEL === "1");
+const isLocalDev = false;
 
 export default async function authMiddleware(req, res, next) {
   const token = req.cookies["auth-token"];
