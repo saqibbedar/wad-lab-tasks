@@ -1,6 +1,0 @@
-1. WWXS001: Winter Wear Sweaters
-2. WWXH001: Winter Wear Hoodies
-3. SAWXJ001: Season All Wear Jeans
-
-
-Note: X denotes - i.e., WWXS001 = WW-S001.

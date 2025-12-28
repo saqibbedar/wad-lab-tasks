@@ -8,9 +8,6 @@ import cookieParser from "cookie-parser";
 import crypto from "crypto";
 import fs from "fs";
 
-
-
-
 // models
 import Product from "./models/product.model.js";
 import User from "./models/user.model.js";
@@ -46,8 +43,6 @@ const connectDB = async () => {
 // app setup
 const app = express();
 
-
-
 // middlewares
 app.use(express.json());
 app.use(bodyParser.json());
@@ -82,15 +77,14 @@ async function safeUnlink(filePath) {
   }
 }
 
-// ***************************** API Routes *****************************
+// ***************************** General *****************************
 
 // Home directory
 app.get("/", (req, res) => {
   res.redirect(
-    isLocalDev ? "/public/project/homepage.html" : "/project/homepage.html"
+    isLocalDev ? "/public/index.html" : "/project/index.html"
   );
 });
-
 
 // get all products
 app.get("/api/products", async (req, res) => {
@@ -116,8 +110,7 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-
-// ***************************** Admin Routes *****************************
+// ***************************** Admin Routes : Saqib *****************************
 
 // create a product - admin only
 app.post(
@@ -329,7 +322,7 @@ app.delete(
   }
 );
 
-// ********************** Public API Routes *****************************
+// ********************** Public API Routes : Ali *****************************
 
 // search a product with type, name or description /api/search?q=<query>
 app.get("/api/products/search", async (req, res) => {
@@ -411,7 +404,7 @@ app.get("/api/products/:q", async (req, res) => {
   }
 });
 
-// ********************** User Auth Routes *****************************
+// ********************** User Auth Routes : Saqib *****************************
 
 // cookie based login for 1 day
 app.post("/api/login", async (req, res) => {
@@ -475,15 +468,13 @@ app.post("/api/logout", async (req, res) => {
     await Session.deleteOne({ token });
   }
   res.clearCookie("auth-token");
-  res.redirect(
-    isLocalDev ? "/public/project/homepage.html" : "/project/homepage.html"
-  );
+  res.redirect("/");
 });
 
 app.post("/api/signup", async (req, res) => {
   try {
     let { username, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     if (!username || !password) {
       return res
         .status(400)
@@ -508,7 +499,7 @@ app.post("/api/signup", async (req, res) => {
     }
     password = await hashPassword(password);
     let newUser = new User({ username, password });
-    console.log(newUser);
+    // console.log(newUser);
     await newUser.save();
     return res.status(201).json({
       message: "Signup successful",
@@ -523,7 +514,7 @@ app.post("/api/signup", async (req, res) => {
   }
 });
 
-// *********************** Cart Routes *****************************
+// *********************** Cart Routes : Abdullah *****************************
 app.get("/api/cart", authMiddleware, async (req, res) => {
   try {
     const userCart = await Cart.findOne({ userId: req.user._id }).populate({

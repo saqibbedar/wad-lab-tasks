@@ -14,10 +14,10 @@ export default async function authMiddleware(req, res, next) {
     if(session) {
       await session.deleteOne();
     }
-    return res.redirect(isLocalDev ? "/public/project/pages/Login.html" : "project/pages/Login.html");
+    return res.redirect(isLocalDev ? "/public/pages/login/index.html" : "pages/login/index.html");
   }
   if(!session || session.expiresAt < new Date()) {
-    return res.redirect(isLocalDev ? "/public/project/pages/Login.html" : "project/pages/Login.html");
+    return res.redirect(isLocalDev ? "/public/pages/login/index.html" : "pages/login/index.html");
   }
   // payload for next
   /**

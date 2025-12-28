@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="../../styles.css">
+    <link rel="stylesheet" href="./index.css">
     <title>Login</title>
 </head>
 <body>
     <!-- navbar -->
     <nav>
         <ul>
-            <li><a href="../homepage.html" title="Home">LOGO</a></li>
+            <li><a href="/" title="Home">LOGO</a></li>
             <li>
-                <a href="../ali/ali.html" title="search"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></a>
+                <a href="../search/index.html" title="search"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-search-icon lucide-search"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg></a>
             </li>
         </ul>
     </nav>
@@ -87,6 +87,7 @@
 
         // const isLocalDev = true; // change it for vercel, when upload code to github
 
+        // submit form
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
             const formData = new FormData(form);
@@ -124,6 +125,8 @@
         })
 
     </script>
-    <script src="./login.js"></script>
+
+    <!-- UI Management: Onclick toggle Password Type -->
+    <script src="./index.js"></script>
 </body>
 </html>
