@@ -20,8 +20,11 @@ This repository contains my web projects, part of my semester course **CS-234 We
 | 11. | Lab10 | NodeJS app with MongoDB database, deployed on vercel | [Preview →](https://wad-lab-tasks.vercel.app/) | [Source →](./src/tasks/Lab10/) |
 
 # Resources
+1. [Books](./resources/books)
 1. [Midterm Past Paper 2022](./src/past-papers/mid/)
 2. [FinalTerm Past Paper 2022](./src/past-papers/final/)
+
+Copyright © Books are intellectual property of their respective authors/publishers. They are provided here solely for educational purposes. All rights reserved to the original authors/publishers.
 
 ## How to Use
 
